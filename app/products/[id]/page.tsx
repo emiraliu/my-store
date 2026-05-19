@@ -2,57 +2,66 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import type { Product } from '@/lib/types'
+import { getToneColor } from '@/lib/tones'
 import AddToCartButton from './AddToCartButton'
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
-
   const { data } = await supabase.from('products').select('*').eq('id', id).eq('active', true).single()
   if (!data) notFound()
   const product = data as Product
+  const toneColor = getToneColor(product.category, product.id)
+  const firstWord = product.name.split(' ')[0]
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <div className="grid md:grid-cols-2 gap-12">
-        {/* Images */}
-        <div className="space-y-3">
-          {product.images.length > 0 ? (
-            product.images.map((img, i) => (
-              <div key={i} className="aspect-[4/5] relative overflow-hidden rounded-xl bg-zinc-100">
-                <Image src={img} alt={`${product.name} ${i + 1}`} fill className="object-cover" sizes="50vw" />
-              </div>
-            ))
-          ) : (
-            <div className="aspect-[4/5] bg-zinc-100 rounded-xl flex items-center justify-center text-zinc-400">
-              No image
-            </div>
-          )}
-        </div>
+    <div style={{ background: 'var(--c-bg)', minHeight: '100dvh' }}>
+      {/* Hero */}
+      <div style={{ position: 'relative', width: '100%', aspectRatio: '3/4', overflow: 'hidden', borderRadius: '0 0 24px 24px' }}>
+        {product.images[0] ? (
+          <Image
+            src={product.images[0]}
+            alt={product.name}
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="100vw"
+            priority
+          />
+        ) : (
+          <div style={{
+            width: '100%', height: '100%',
+            backgroundColor: toneColor,
+            backgroundImage: 'repeating-linear-gradient(135deg, rgba(44,37,32,0.025) 0 1px, transparent 1px 14px)',
+          }}>
+            <span style={{
+              position: 'absolute', left: 12, bottom: 12,
+              fontFamily: 'var(--f-mono)', fontSize: 9, letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              color: 'rgba(44,37,32,0.65)',
+              background: 'rgba(251,247,239,0.7)',
+              padding: '2px 5px', borderRadius: 3,
+            }}>
+              PHOTO · {firstWord}
+            </span>
+          </div>
+        )}
 
-        {/* Info */}
-        <div className="md:sticky md:top-24 self-start">
-          <p className="text-xs uppercase tracking-widest text-zinc-400 mb-2">{product.category}</p>
-          <h1 className="text-3xl font-bold mb-3">{product.name}</h1>
-          <p className="text-2xl font-semibold mb-6">${product.price.toFixed(2)}</p>
-
-          {product.description && (
-            <p className="text-zinc-600 leading-relaxed mb-8">{product.description}</p>
-          )}
-
-          {product.stock === 0 ? (
-            <div className="w-full py-4 text-center bg-zinc-100 text-zinc-500 rounded-xl font-medium">
-              Out of Stock
-            </div>
-          ) : (
-            <AddToCartButton product={product} />
-          )}
-
-          <p className="text-sm text-zinc-400 mt-4 text-center">
-            Pay on delivery — no upfront payment required.
-          </p>
+        {/* Pagination dots */}
+        <div style={{
+          position: 'absolute', bottom: 14, left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', gap: 5,
+        }}>
+          {[0,1,2,3].map(i => (
+            <span key={i} style={{
+              width: i === 0 ? 18 : 5, height: 5, borderRadius: 999,
+              background: i === 0 ? 'var(--c-ink)' : 'rgba(44,37,32,0.3)',
+            }} />
+          ))}
         </div>
       </div>
+
+      {/* AddToCartButton handles: back btn, heart btn, body content, floating bar */}
+      <AddToCartButton product={product} />
     </div>
   )
 }

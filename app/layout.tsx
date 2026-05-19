@@ -1,40 +1,46 @@
 import type { Metadata } from 'next'
-import { Geist } from 'next/font/google'
+import { Cormorant_Garamond, DM_Sans, DM_Mono } from 'next/font/google'
 import './globals.css'
-import { createClient } from '@/lib/supabase/server'
 import CartProvider from '@/components/CartProvider'
-import Navbar from '@/components/Navbar'
+import WishlistProvider from '@/components/WishlistProvider'
+import BottomNav from '@/components/BottomNav'
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-geist-sans' })
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-cormorant',
+  display: 'swap',
+})
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-dm-sans',
+  display: 'swap',
+})
+
+const dmMono = DM_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-dm-mono',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: 'My Store',
-  description: 'Fashion & Clothing',
+  title: 'sade.',
+  description: 'Modest essentials, slowly made — from our atelier to your door.',
 }
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  let profile = null
-  if (user) {
-    const { data } = await supabase
-      .from('profiles')
-      .select('full_name, is_admin')
-      .eq('id', user.id)
-      .single()
-    profile = data
-  }
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geist.variable} h-full`}>
-      <body className="min-h-full flex flex-col bg-white text-zinc-900 antialiased">
+    <html lang="en" className={`${cormorant.variable} ${dmSans.variable} ${dmMono.variable}`}>
+      <body className="min-h-dvh">
         <CartProvider>
-          <Navbar user={user} profile={profile} />
-          <main className="flex-1">{children}</main>
-          <footer className="border-t border-zinc-100 py-8 text-center text-sm text-zinc-400">
-            © {new Date().getFullYear()} My Store. All rights reserved.
-          </footer>
+          <WishlistProvider>
+            <main className="pb-28">{children}</main>
+            <BottomNav />
+          </WishlistProvider>
         </CartProvider>
       </body>
     </html>

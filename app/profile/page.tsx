@@ -1,14 +1,15 @@
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import type { Order } from '@/lib/types'
 
-const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  pending_confirmation: { label: 'Awaiting confirmation', color: 'bg-amber-50 text-amber-700' },
-  confirmed: { label: 'Confirmed', color: 'bg-blue-50 text-blue-700' },
-  processing: { label: 'Processing', color: 'bg-purple-50 text-purple-700' },
-  shipped: { label: 'Shipped', color: 'bg-indigo-50 text-indigo-700' },
-  delivered: { label: 'Delivered', color: 'bg-green-50 text-green-700' },
-  cancelled: { label: 'Cancelled', color: 'bg-red-50 text-red-700' },
+const STATUS_LABELS: Record<string, { label: string }> = {
+  pending_confirmation: { label: 'Awaiting confirmation' },
+  confirmed:  { label: 'Confirmed' },
+  processing: { label: 'Processing' },
+  shipped:    { label: 'Shipped' },
+  delivered:  { label: 'Delivered' },
+  cancelled:  { label: 'Cancelled' },
 }
 
 export default async function ProfilePage({
@@ -36,65 +37,91 @@ export default async function ProfilePage({
   const orderList = (orders ?? []) as Order[]
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold">{profile?.full_name ?? 'My Account'}</h1>
-          <p className="text-zinc-400 text-sm mt-1">{profile?.phone}</p>
+    <div style={{ background: 'var(--c-bg)', minHeight: '100dvh', padding: '60px 22px 120px' }}>
+      {/* Header */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ fontFamily: 'var(--f-mono)', fontSize: 10, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--c-ink-mute)', marginBottom: 4 }}>
+          YOUR ACCOUNT
         </div>
+        <div style={{ fontFamily: 'var(--f-display)', fontSize: 36, fontWeight: 500 }}>
+          {profile?.full_name ?? 'You.'}
+        </div>
+        {profile?.phone && (
+          <div style={{ fontFamily: 'var(--f-mono)', fontSize: 12, color: 'var(--c-ink-mute)', marginTop: 4 }}>
+            {profile.phone}
+          </div>
+        )}
       </div>
 
+      {/* Order placed banner */}
       {ordered && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-8 text-green-800 text-sm">
-          <p className="font-medium">Order placed!</p>
-          <p>Check your phone — reply <strong>YES</strong> to the SMS to confirm your order.</p>
+        <div style={{
+          background: 'var(--c-card)', border: '0.5px solid var(--c-line)',
+          borderRadius: 'var(--r-card)', padding: '14px 16px', marginBottom: 24,
+          fontSize: 13,
+        }}>
+          <div style={{ fontWeight: 500, marginBottom: 2 }}>Order placed!</div>
+          <div style={{ color: 'var(--c-ink-mute)' }}>Reply <strong>YES</strong> to the SMS sent to your phone to confirm.</div>
         </div>
       )}
 
-      <h2 className="text-lg font-semibold mb-4">My orders</h2>
+      {/* Orders */}
+      <div style={{ fontFamily: 'var(--f-mono)', fontSize: 10, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--c-ink-mute)', marginBottom: 14 }}>
+        YOUR ORDERS · {orderList.length}
+      </div>
 
       {orderList.length === 0 ? (
-        <div className="text-center py-16 text-zinc-400">
+        <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--c-ink-mute)', fontSize: 13 }}>
           <p>No orders yet.</p>
+          <Link href="/" style={{
+            display: 'inline-block', marginTop: 14, padding: '10px 18px', borderRadius: 999,
+            border: '0.5px solid var(--c-line)', color: 'var(--c-ink)',
+            fontSize: 13, textDecoration: 'none', fontFamily: 'var(--f-body)',
+          }}>Browse the catalog</Link>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {orderList.map(order => {
-            const status = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-zinc-100 text-zinc-600' }
+            const status = STATUS_LABELS[order.status] ?? { label: order.status }
             const shortId = order.id.slice(0, 8).toUpperCase()
-            const date = new Date(order.created_at).toLocaleDateString('en-US', {
-              year: 'numeric', month: 'short', day: 'numeric',
-            })
+            const date = new Date(order.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
             return (
-              <div key={order.id} className="border border-zinc-100 rounded-xl p-5">
-                <div className="flex items-center justify-between mb-3">
+              <div key={order.id} style={{
+                background: 'var(--c-card)', border: '0.5px solid var(--c-line)',
+                borderRadius: 'var(--r-card)', padding: '16px',
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                   <div>
-                    <p className="font-semibold">Order #{shortId}</p>
-                    <p className="text-xs text-zinc-400 mt-0.5">{date}</p>
+                    <div style={{ fontFamily: 'var(--f-mono)', fontSize: 11, letterSpacing: '0.04em' }}>#{shortId}</div>
+                    <div style={{ fontSize: 11, color: 'var(--c-ink-mute)', marginTop: 2, fontFamily: 'var(--f-mono)' }}>{date}</div>
                   </div>
-                  <span className={`text-xs font-medium px-3 py-1 rounded-full ${status.color}`}>
+                  <span style={{
+                    fontFamily: 'var(--f-mono)', fontSize: 9, letterSpacing: '0.06em', textTransform: 'uppercase',
+                    padding: '4px 8px', borderRadius: 999,
+                    background: 'var(--c-tag-bg)', color: 'var(--c-ink-mute)',
+                  }}>
                     {status.label}
                   </span>
                 </div>
 
-                <div className="space-y-1.5 text-sm">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 13, color: 'var(--c-ink-mute)' }}>
                   {order.items.map((item, i) => (
-                    <div key={i} className="flex justify-between text-zinc-600">
-                      <span>{item.name} {item.size && `(${item.size})`} × {item.quantity}</span>
-                      <span>${(item.price * item.quantity).toFixed(2)}</span>
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span>{item.name}{item.size ? ` (${item.size})` : ''} × {item.quantity}</span>
+                      <span style={{ fontFamily: 'var(--f-mono)' }}>€{(item.price * item.quantity).toFixed(2)}</span>
                     </div>
                   ))}
                 </div>
 
-                <div className="border-t border-zinc-100 mt-3 pt-3 flex justify-between font-semibold text-sm">
+                <div style={{ borderTop: '0.5px solid var(--c-line)', marginTop: 12, paddingTop: 12, display: 'flex', justifyContent: 'space-between', fontSize: 13, fontWeight: 500 }}>
                   <span>Total</span>
-                  <span>${order.total.toFixed(2)}</span>
+                  <span style={{ fontFamily: 'var(--f-mono)' }}>€{order.total.toFixed(2)}</span>
                 </div>
 
                 {order.status === 'pending_confirmation' && (
-                  <p className="text-xs text-amber-600 mt-3">
-                    Reply <strong>YES</strong> to the SMS sent to {order.phone} to confirm this order.
-                  </p>
+                  <div style={{ fontSize: 11, color: 'var(--c-ink-mute)', marginTop: 10, fontStyle: 'italic' }}>
+                    Reply YES to the SMS sent to {order.phone} to confirm.
+                  </div>
                 )}
               </div>
             )
