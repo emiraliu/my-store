@@ -16,7 +16,6 @@ const CATEGORIES = [
   { id: 'sets',    label: 'Sets' },
 ]
 
-const MARQUEE_TOKENS = Array.from({ length: 8 })
 
 export default function HomeScreen({ products }: { products: Product[] }) {
   const [category, setCategory] = useState('all')
@@ -68,7 +67,7 @@ export default function HomeScreen({ products }: { products: Product[] }) {
           fontSize: 20, lineHeight: 1.4, color: 'var(--c-ink-mute)',
           maxWidth: 300, margin: '0 auto 28px',
         }}>
-          Dress like the woman you&apos;re becoming.
+          Dress like the woman you{"'"}re becoming.
         </div>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -83,32 +82,6 @@ export default function HomeScreen({ products }: { products: Product[] }) {
         </div>
       </div>
 
-        {/* COD marquee */}
-        <div className="no-scrollbar" style={{
-          overflow: 'hidden',
-          margin: '0 -20px 14px',
-          padding: '10px 0',
-          borderTop: '0.5px solid var(--c-line)',
-          borderBottom: '0.5px solid var(--c-line)',
-          color: 'var(--c-cod)',
-        }}>
-          <div className="marquee-track">
-            {MARQUEE_TOKENS.map((_, i) => (
-              <span key={i} style={{
-                fontFamily: 'var(--f-mono)', fontSize: 11,
-                letterSpacing: '0.04em', textTransform: 'uppercase',
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                flexShrink: 0,
-              }}>
-                Cash on delivery
-                <span style={{ width: 4, height: 4, borderRadius: 999, background: 'currentColor', display: 'inline-block' }} />
-                Pay when you receive
-                <span style={{ width: 4, height: 4, borderRadius: 999, background: 'currentColor', display: 'inline-block' }} />
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Category strip */}
       <div className="no-scrollbar" style={{
