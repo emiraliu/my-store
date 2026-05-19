@@ -2,7 +2,6 @@
 
 import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 
 const STATUSES = [
   { value: 'pending_confirmation', label: 'Pending confirmation' },
@@ -18,10 +17,13 @@ export default function OrderStatusSelect({ orderId, currentStatus }: { orderId:
   const router = useRouter()
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    const newStatus = e.target.value
+    const status = e.target.value
     startTransition(async () => {
-      const supabase = createClient()
-      await supabase.from('orders').update({ status: newStatus }).eq('id', orderId)
+      await fetch(`/api/admin/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      })
       router.refresh()
     })
   }

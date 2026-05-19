@@ -5,6 +5,12 @@ import type { Product } from '@/lib/types'
 import { getToneColor } from '@/lib/tones'
 import AddToCartButton from './AddToCartButton'
 
+const VIDEO_EXTS = ['mp4', 'mov', 'webm', 'ogg', 'avi']
+function isVideo(url: string) {
+  const ext = url.split('.').pop()?.split('?')[0]?.toLowerCase() ?? ''
+  return VIDEO_EXTS.includes(ext)
+}
+
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
@@ -13,14 +19,25 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const product = data as Product
   const toneColor = getToneColor(product.category, product.id)
   const firstWord = product.name.split(' ')[0]
+  const heroUrl = product.images[0] ?? null
+  const heroIsVideo = heroUrl ? isVideo(heroUrl) : false
 
   return (
     <div style={{ background: 'var(--c-bg)', minHeight: '100dvh' }}>
       {/* Hero */}
       <div style={{ position: 'relative', width: '100%', aspectRatio: '3/4', overflow: 'hidden', borderRadius: '0 0 24px 24px' }}>
-        {product.images[0] ? (
+        {heroIsVideo ? (
+          <video
+            src={heroUrl!}
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        ) : heroUrl ? (
           <Image
-            src={product.images[0]}
+            src={heroUrl}
             alt={product.name}
             fill
             style={{ objectFit: 'cover' }}

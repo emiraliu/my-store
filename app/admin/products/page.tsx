@@ -1,11 +1,11 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { Plus } from 'lucide-react'
 import type { Product } from '@/lib/types'
 import DeleteProductButton from './DeleteProductButton'
 
 export default async function AdminProductsPage() {
-  const supabase = await createClient()
+  const supabase = await createAdminClient()
   const { data } = await supabase.from('products').select('*').order('created_at', { ascending: false })
   const products = (data ?? []) as Product[]
 

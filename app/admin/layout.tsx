@@ -1,7 +1,16 @@
+import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { LayoutDashboard, Package, ShoppingCart } from 'lucide-react'
+import LogoutButton from './LogoutButton'
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies()
+  const isAuthed = cookieStore.get('admin-session')?.value === 'admin-authed'
+
+  if (!isAuthed) {
+    return <>{children}</>
+  }
+
   return (
     <div className="flex min-h-screen">
       <aside className="w-56 bg-zinc-950 text-white flex-shrink-0 flex flex-col">
@@ -23,10 +32,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             Orders
           </Link>
         </nav>
-        <div className="p-4 border-t border-zinc-800">
+        <div className="p-4 border-t border-zinc-800 flex items-center justify-between">
           <Link href="/" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
-            ← Back to store
+            ← Store
           </Link>
+          <LogoutButton />
         </div>
       </aside>
       <div className="flex-1 bg-zinc-50 overflow-auto">
