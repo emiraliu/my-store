@@ -28,8 +28,8 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'sade.',
-  description: 'Modest essentials, slowly made — from our atelier to your door.',
+  title: 'MyStore',
+  description: 'Premium modest wear, made to last — delivered to your door.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

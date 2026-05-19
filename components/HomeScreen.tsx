@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { SlidersHorizontal, Search } from 'lucide-react'
+import { SlidersHorizontal } from 'lucide-react'
 import type { Product } from '@/lib/types'
 import ProductCard from './ProductCard'
 import FiltersSheet, { type Filters } from './FiltersSheet'
@@ -59,34 +59,32 @@ export default function HomeScreen({ products }: { products: Product[] }) {
   return (
     <>
       {/* Brand hero */}
-      <div style={{ padding: '64px 20px 8px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 14 }}>
-          <div>
-            <div style={{ fontFamily: 'var(--f-mono)', fontSize: 10, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--c-ink-mute)', marginBottom: 4 }}>
-              EST · Istanbul · 2024
-            </div>
-            <div style={{ fontFamily: 'var(--f-display)', fontWeight: 500, fontSize: 44, lineHeight: 0.95 }}>
-              sade<span style={{ fontStyle: 'italic', color: 'var(--c-accent)' }}>.</span>
-            </div>
-          </div>
-          <button style={{
-            width: 40, height: 40, borderRadius: 999,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: 'var(--c-card)', border: '0.5px solid var(--c-line)',
-            color: 'var(--c-ink)', cursor: 'pointer',
-          }} aria-label="Search">
-            <Search size={17} />
-          </button>
+      <div style={{ padding: '72px 24px 0', textAlign: 'center' }}>
+        <div style={{ fontFamily: 'var(--f-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--c-ink-mute)', marginBottom: 16 }}>
+          Modest Fashion · Est. 2024
         </div>
-
-        {/* Tagline */}
+        <div style={{ fontFamily: 'var(--f-display)', fontWeight: 500, fontSize: 72, lineHeight: 0.9, marginBottom: 20 }}>
+          MyStore<span style={{ fontStyle: 'italic', color: 'var(--c-accent)' }}>.</span>
+        </div>
         <div style={{
           fontFamily: 'var(--f-display)', fontStyle: 'italic',
-          fontSize: 17, lineHeight: 1.35, color: 'var(--c-ink-mute)',
-          marginBottom: 16, maxWidth: 280,
+          fontSize: 18, lineHeight: 1.4, color: 'var(--c-ink-mute)',
+          marginBottom: 28, maxWidth: 300, margin: '0 auto 28px',
         }}>
-          Modest essentials, slowly made — from our atelier to your door.
+          Premium modest wear, made to last — delivered to your door.
         </div>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+          padding: '6px 14px', borderRadius: 999,
+          background: 'var(--c-tag-bg)', border: '0.5px solid var(--c-line)',
+          fontFamily: 'var(--f-mono)', fontSize: 10,
+          letterSpacing: '0.06em', textTransform: 'uppercase',
+          color: 'var(--c-cod)', marginBottom: 28,
+        }}>
+          <span style={{ width: 5, height: 5, borderRadius: 999, background: 'currentColor' }} />
+          Cash on delivery · No card needed
+        </div>
+      </div>
 
         {/* COD marquee */}
         <div className="no-scrollbar" style={{
