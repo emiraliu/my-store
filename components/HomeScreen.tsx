@@ -60,18 +60,15 @@ export default function HomeScreen({ products }: { products: Product[] }) {
     <>
       {/* Brand hero */}
       <div style={{ padding: '72px 24px 0', textAlign: 'center' }}>
-        <div style={{ fontFamily: 'var(--f-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--c-ink-mute)', marginBottom: 16 }}>
-          Modest Fashion · Est. 2024
-        </div>
         <div style={{ fontFamily: 'var(--f-display)', fontWeight: 500, fontSize: 72, lineHeight: 0.9, marginBottom: 20 }}>
           MyStore<span style={{ fontStyle: 'italic', color: 'var(--c-accent)' }}>.</span>
         </div>
         <div style={{
           fontFamily: 'var(--f-display)', fontStyle: 'italic',
-          fontSize: 18, lineHeight: 1.4, color: 'var(--c-ink-mute)',
-          marginBottom: 28, maxWidth: 300, margin: '0 auto 28px',
+          fontSize: 20, lineHeight: 1.4, color: 'var(--c-ink-mute)',
+          maxWidth: 300, margin: '0 auto 28px',
         }}>
-          Premium modest wear, made to last — delivered to your door.
+          Dress like the woman you&apos;re becoming.
         </div>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
