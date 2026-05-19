@@ -32,7 +32,7 @@ export default async function HomePage({
       <section className="bg-zinc-950 text-white py-24 px-4 text-center">
         <p className="text-xs uppercase tracking-[0.3em] text-zinc-400 mb-4">New Collection</p>
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-          Wear Your Story
+          Kanita
         </h1>
         <p className="text-zinc-400 max-w-md mx-auto mb-8">
           Premium clothing, shoes, and accessories. Delivered to your door — pay on delivery.
