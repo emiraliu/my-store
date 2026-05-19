@@ -2,19 +2,22 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function proxy(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request })
   const { pathname } = request.nextUrl
 
-  // Admin: cookie-based auth, no Supabase involved
-  if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
-    const session = request.cookies.get('admin-session')?.value
-    if (session !== 'admin-authed') {
-      return NextResponse.redirect(new URL('/admin/login', request.url))
+  // Admin routes: cookie-based auth only, never touch Supabase
+  if (pathname.startsWith('/admin')) {
+    if (!pathname.startsWith('/admin/login')) {
+      const session = request.cookies.get('admin-session')?.value
+      if (session !== 'admin-authed') {
+        return NextResponse.redirect(new URL('/admin/login', request.url))
+      }
     }
-    return supabaseResponse
+    return NextResponse.next()
   }
 
-  // Supabase auth refresh + route protection for user-facing pages
+  // User-facing protected routes: refresh Supabase session
+  let supabaseResponse = NextResponse.next({ request })
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
