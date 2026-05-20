@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { updateOrderStatus } from './actions'
 
 const STATUSES = [
   { value: 'pending_confirmation', label: 'Pending' },
@@ -25,16 +26,12 @@ export default function OrderStatusSelect({ orderId, currentStatus }: { orderId:
     setError(false)
 
     startTransition(async () => {
-      const res = await fetch(`/api/admin/orders/${orderId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: next }),
-      })
-      if (!res.ok) {
+      try {
+        await updateOrderStatus(orderId, next)
+        router.refresh()
+      } catch {
         setStatus(prev)
         setError(true)
-      } else {
-        router.refresh()
       }
     })
   }
