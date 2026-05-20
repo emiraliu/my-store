@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import { updateOrderStatus } from './actions'
 
 const STATUSES = [
@@ -16,6 +17,7 @@ export default function OrderStatusSelect({ orderId, currentStatus }: { orderId:
   const [status, setStatus] = useState(currentStatus)
   const [isPending, startTransition] = useTransition()
   const [errMsg, setErrMsg] = useState<string | null>(null)
+  const router = useRouter()
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const next = e.target.value
@@ -26,6 +28,7 @@ export default function OrderStatusSelect({ orderId, currentStatus }: { orderId:
     startTransition(async () => {
       try {
         await updateOrderStatus(orderId, next)
+        router.refresh()
       } catch (err: any) {
         setStatus(prev)
         setErrMsg(err?.message ?? 'error')
