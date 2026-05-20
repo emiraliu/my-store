@@ -15,32 +15,32 @@ const STATUSES = [
 export default function OrderStatusSelect({ orderId, currentStatus }: { orderId: string; currentStatus: string }) {
   const [status, setStatus] = useState(currentStatus)
   const [isPending, startTransition] = useTransition()
-  const [error, setError] = useState(false)
+  const [errMsg, setErrMsg] = useState<string | null>(null)
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const next = e.target.value
     const prev = status
     setStatus(next)
-    setError(false)
+    setErrMsg(null)
 
     startTransition(async () => {
       try {
         await updateOrderStatus(orderId, next)
-      } catch {
+      } catch (err: any) {
         setStatus(prev)
-        setError(true)
+        setErrMsg(err?.message ?? 'error')
       }
     })
   }
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <select
         value={status}
         onChange={handleChange}
         disabled={isPending}
         style={{
-          border: `0.5px solid ${error ? '#9b4d4d' : 'rgba(44,37,32,0.18)'}`,
+          border: `0.5px solid ${errMsg ? '#9b4d4d' : 'rgba(44,37,32,0.18)'}`,
           borderRadius: 8,
           padding: '6px 10px',
           fontSize: 12,
@@ -56,9 +56,14 @@ export default function OrderStatusSelect({ orderId, currentStatus }: { orderId:
           <option key={s.value} value={s.value}>{s.label}</option>
         ))}
       </select>
-      {error && (
-        <span style={{ fontFamily: "var(--font-dm-mono), monospace", fontSize: 9.5, color: '#9b4d4d', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-          Failed
+      {errMsg && (
+        <span style={{
+          fontFamily: "var(--font-dm-mono), monospace",
+          fontSize: 9.5, color: '#9b4d4d',
+          letterSpacing: '0.04em',
+          maxWidth: 160, wordBreak: 'break-all',
+        }}>
+          {errMsg}
         </span>
       )}
     </div>
