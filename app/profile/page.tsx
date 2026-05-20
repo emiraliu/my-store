@@ -24,7 +24,7 @@ export default async function ProfilePage({
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name, phone, address')
+    .select('full_name, surname, username, phone, address')
     .eq('id', user.id)
     .single()
 
@@ -44,8 +44,15 @@ export default async function ProfilePage({
           YOUR ACCOUNT
         </div>
         <div style={{ fontFamily: 'var(--f-display)', fontSize: 36, fontWeight: 500 }}>
-          {profile?.full_name ?? 'You.'}
+          {profile?.full_name && profile?.surname
+            ? `${profile.full_name} ${profile.surname}`
+            : profile?.full_name ?? 'You.'}
         </div>
+        {profile?.username && (
+          <div style={{ fontFamily: 'var(--f-mono)', fontSize: 11, color: 'var(--c-ink-mute)', marginTop: 2 }}>
+            @{profile.username}
+          </div>
+        )}
         {profile?.phone && (
           <div style={{ fontFamily: 'var(--f-mono)', fontSize: 12, color: 'var(--c-ink-mute)', marginTop: 4 }}>
             {profile.phone}
