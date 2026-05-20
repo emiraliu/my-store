@@ -19,9 +19,13 @@ export default function DeleteProductButton({ id }: { id: string }) {
     <button
       onClick={handleDelete}
       disabled={isPending}
-      className="text-red-500 hover:text-red-700 text-xs underline disabled:opacity-50"
+      style={{
+        background: 'none', border: 'none', cursor: 'pointer',
+        color: '#9b4d4d', fontSize: 12, opacity: isPending ? 0.5 : 1,
+        fontFamily: "var(--font-dm-mono), monospace", letterSpacing: '0.04em',
+      }}
     >
-      {isPending ? '...' : 'Delete'}
+      {isPending ? '…' : 'Delete'}
     </button>
   )
 }

@@ -1,68 +1,188 @@
 import { createAdminClient } from '@/lib/supabase/server'
+import Link from 'next/link'
+
+const F = {
+  display: "var(--font-cormorant), 'Times New Roman', serif",
+  body:    "var(--font-dm-sans), system-ui, sans-serif",
+  mono:    "var(--font-dm-mono), monospace",
+}
+
+const STATUS_MAP: Record<string, { label: string; tone: string }> = {
+  pending_confirmation: { label: 'Pending',   tone: 'warn' },
+  confirmed:            { label: 'Confirmed', tone: 'good' },
+  processing:           { label: 'Processing',tone: 'warn' },
+  shipped:              { label: 'Shipped',   tone: 'neutral' },
+  delivered:            { label: 'Delivered', tone: 'good' },
+  cancelled:            { label: 'Cancelled', tone: 'bad' },
+}
+
+function pillStyle(tone: string): React.CSSProperties {
+  if (tone === 'good')    return { color: '#4d6b4d', background: 'rgba(77,107,77,0.10)' }
+  if (tone === 'warn')    return { color: '#b58a4d', background: 'rgba(181,138,77,0.12)' }
+  if (tone === 'bad')     return { color: '#9b4d4d', background: 'rgba(155,77,77,0.12)' }
+  return { color: '#6b5e52', background: 'rgba(44,37,32,0.05)' }
+}
 
 export default async function AdminDashboard() {
   const supabase = await createAdminClient()
 
-  const [{ count: productCount }, { count: orderCount }, { data: recentOrders }] = await Promise.all([
+  const [
+    { count: productCount },
+    { count: orderCount },
+    { count: pendingCount },
+    { data: recentOrders },
+  ] = await Promise.all([
     supabase.from('products').select('*', { count: 'exact', head: true }).eq('active', true),
     supabase.from('orders').select('*', { count: 'exact', head: true }),
+    supabase.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'pending_confirmation'),
     supabase.from('orders').select('*, profiles(full_name, phone)').order('created_at', { ascending: false }).limit(5),
   ])
 
-  const STATUS_COLORS: Record<string, string> = {
-    pending_confirmation: 'bg-amber-100 text-amber-700',
-    confirmed: 'bg-blue-100 text-blue-700',
-    processing: 'bg-purple-100 text-purple-700',
-    shipped: 'bg-indigo-100 text-indigo-700',
-    delivered: 'bg-green-100 text-green-700',
-    cancelled: 'bg-red-100 text-red-700',
-  }
+  const stats = [
+    { label: 'Active products', value: productCount ?? 0 },
+    { label: 'Total orders',    value: orderCount ?? 0 },
+    { label: 'Pending confirm', value: pendingCount ?? 0 },
+    { label: 'Recent orders',   value: recentOrders?.length ?? 0 },
+  ]
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-8">Dashboard</h1>
-
-      <div className="grid grid-cols-2 gap-4 mb-10">
-        <div className="bg-white rounded-xl p-6 border border-zinc-100">
-          <p className="text-sm text-zinc-500 mb-1">Active products</p>
-          <p className="text-3xl font-bold">{productCount ?? 0}</p>
+    <div style={{ fontFamily: F.body, color: '#2c2520' }}>
+      {/* Topbar */}
+      <div style={{
+        display: 'flex', alignItems: 'center',
+        padding: '14px 28px',
+        borderBottom: '0.5px solid rgba(44,37,32,0.10)',
+        gap: 14, flexShrink: 0,
+        background: '#efe9df',
+      }}>
+        <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6b5e52' }}>
+          Admin <span style={{ margin: '0 8px', opacity: 0.5 }}>/</span>
+          <strong style={{ color: '#2c2520', fontWeight: 500 }}>Dashboard</strong>
         </div>
-        <div className="bg-white rounded-xl p-6 border border-zinc-100">
-          <p className="text-sm text-zinc-500 mb-1">Total orders</p>
-          <p className="text-3xl font-bold">{orderCount ?? 0}</p>
-        </div>
+        <Link href="/admin/orders" style={{
+          marginLeft: 'auto',
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          padding: '7px 12px', borderRadius: 999,
+          background: '#fbf7ef', border: '0.5px solid rgba(44,37,32,0.10)',
+          color: '#2c2520', fontSize: 12.5, textDecoration: 'none',
+          fontFamily: F.body,
+        }}>
+          All orders →
+        </Link>
       </div>
 
-      <h2 className="font-semibold mb-4">Recent orders</h2>
-      <div className="bg-white rounded-xl border border-zinc-100 overflow-hidden">
-        {!recentOrders || recentOrders.length === 0 ? (
-          <p className="p-6 text-zinc-400 text-sm">No orders yet.</p>
-        ) : (
-          <table className="w-full text-sm">
-            <thead className="border-b border-zinc-100 text-zinc-500">
-              <tr>
-                <th className="text-left px-6 py-3 font-medium">Order</th>
-                <th className="text-left px-6 py-3 font-medium">Customer</th>
-                <th className="text-left px-6 py-3 font-medium">Total</th>
-                <th className="text-left px-6 py-3 font-medium">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-50">
-              {recentOrders.map((order: any) => (
-                <tr key={order.id}>
-                  <td className="px-6 py-4 font-mono text-xs">{order.id.slice(0, 8).toUpperCase()}</td>
-                  <td className="px-6 py-4">{order.profiles?.full_name ?? '—'}</td>
-                  <td className="px-6 py-4 font-medium">${order.total.toFixed(2)}</td>
-                  <td className="px-6 py-4">
-                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_COLORS[order.status] ?? 'bg-zinc-100 text-zinc-600'}`}>
-                      {order.status.replace(/_/g, ' ')}
-                    </span>
-                  </td>
+      <div style={{ padding: '28px 28px 60px' }}>
+        <h1 style={{
+          fontFamily: F.display,
+          fontSize: 38, fontWeight: 500, lineHeight: 1.05, letterSpacing: '-0.01em',
+          margin: '0 0 6px',
+        }}>
+          Dashboard<em style={{ fontStyle: 'italic', color: '#b5704d' }}>.</em>
+        </h1>
+        <p style={{ fontFamily: F.display, fontStyle: 'italic', fontSize: 14, color: '#6b5e52', margin: '0 0 24px' }}>
+          Cash on delivery — collect when the courier hands it off.
+        </p>
+
+        {/* Stat cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 28 }}>
+          {stats.map(card => (
+            <div key={card.label} style={{
+              padding: '18px 20px 16px',
+              background: '#fbf7ef',
+              border: '0.5px solid rgba(44,37,32,0.10)',
+              borderRadius: 14,
+              display: 'flex', flexDirection: 'column', gap: 8,
+            }}>
+              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b5e52' }}>
+                {card.label}
+              </div>
+              <div style={{ fontFamily: F.display, fontSize: 32, fontWeight: 500, lineHeight: 1, letterSpacing: '-0.01em' }}>
+                {card.value}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Recent orders panel */}
+        <div style={{ background: '#fbf7ef', border: '0.5px solid rgba(44,37,32,0.10)', borderRadius: 14, overflow: 'hidden' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', padding: '18px 20px 12px' }}>
+            <div>
+              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6b5e52' }}>
+                RECENT ORDERS
+              </div>
+              <div style={{ fontFamily: F.display, fontSize: 22, fontWeight: 500, marginTop: 4 }}>
+                Awaiting attention
+              </div>
+            </div>
+            <Link href="/admin/orders" style={{
+              display: 'inline-flex', alignItems: 'center',
+              padding: '7px 12px', borderRadius: 999,
+              background: '#fbf7ef', border: '0.5px solid rgba(44,37,32,0.10)',
+              color: '#2c2520', fontSize: 12.5, textDecoration: 'none',
+              fontFamily: F.body,
+            }}>
+              All orders →
+            </Link>
+          </div>
+
+          {!recentOrders || recentOrders.length === 0 ? (
+            <p style={{ padding: '16px 20px', color: '#6b5e52', fontSize: 13 }}>No orders yet.</p>
+          ) : (
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+              <thead>
+                <tr>
+                  {['Order', 'Customer', 'Total', 'Status', 'Placed'].map(h => (
+                    <th key={h} style={{
+                      textAlign: 'left',
+                      fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em',
+                      textTransform: 'uppercase', color: '#6b5e52', fontWeight: 500,
+                      padding: '12px 16px', borderBottom: '0.5px solid rgba(44,37,32,0.10)',
+                      background: '#f6f1e6',
+                    }}>
+                      {h}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+              </thead>
+              <tbody>
+                {recentOrders.map((order: any) => {
+                  const s = STATUS_MAP[order.status] ?? { label: order.status, tone: 'neutral' }
+                  const shortId = order.id.slice(0, 8).toUpperCase()
+                  const date = new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                  return (
+                    <tr key={order.id} style={{ borderBottom: '0.5px solid rgba(44,37,32,0.10)' }}>
+                      <td style={{ padding: '14px 16px', fontFamily: F.mono, fontSize: 11.5 }}>
+                        #{shortId}
+                      </td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ fontWeight: 500 }}>{order.profiles?.full_name ?? '—'}</div>
+                        <div style={{ fontFamily: F.mono, fontSize: 10, color: '#6b5e52', marginTop: 2 }}>{order.phone}</div>
+                      </td>
+                      <td style={{ padding: '14px 16px', fontFamily: F.mono, fontSize: 11.5, fontWeight: 500 }}>
+                        €{order.total.toFixed(2)}
+                      </td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <span style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 6,
+                          padding: '3px 9px', borderRadius: 999,
+                          fontFamily: F.mono, fontSize: 9.5,
+                          letterSpacing: '0.08em', textTransform: 'uppercase',
+                          whiteSpace: 'nowrap', ...pillStyle(s.tone),
+                        }}>
+                          <span style={{ width: 5, height: 5, borderRadius: 999, background: 'currentColor' }} />
+                          {s.label}
+                        </span>
+                      </td>
+                      <td style={{ padding: '14px 16px', fontFamily: F.mono, fontSize: 10, color: '#6b5e52' }}>
+                        {date}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
     </div>
   )

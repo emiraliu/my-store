@@ -2,8 +2,13 @@
 
 import { useState, useTransition, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { Upload, X, Play } from 'lucide-react'
 import type { Product } from '@/lib/types'
+
+const F = {
+  display: "var(--font-cormorant), 'Times New Roman', serif",
+  body:    "var(--font-dm-sans), system-ui, sans-serif",
+  mono:    "var(--font-dm-mono), monospace",
+}
 
 const CATEGORIES = ['dresses', 'tops', 'scarves', 'outerwear', 'sets']
 const VIDEO_EXTS = ['mp4', 'mov', 'webm', 'ogg', 'avi']
@@ -11,6 +16,23 @@ const VIDEO_EXTS = ['mp4', 'mov', 'webm', 'ogg', 'avi']
 function isVideo(url: string) {
   const ext = url.split('.').pop()?.split('?')[0]?.toLowerCase() ?? ''
   return VIDEO_EXTS.includes(ext)
+}
+
+const inputStyle: React.CSSProperties = {
+  width: '100%', boxSizing: 'border-box',
+  height: 42, borderRadius: 10,
+  border: '0.5px solid rgba(44,37,32,0.18)',
+  background: '#fbf7ef',
+  padding: '0 14px',
+  fontSize: 13.5, fontFamily: F.body,
+  color: '#2c2520', outline: 'none',
+}
+
+const labelStyle: React.CSSProperties = {
+  display: 'block',
+  fontFamily: F.mono, fontSize: 9.5,
+  letterSpacing: '0.08em', textTransform: 'uppercase',
+  color: '#6b5e52', marginBottom: 6,
 }
 
 export default function ProductForm({ product }: { product?: Product }) {
@@ -33,20 +55,22 @@ export default function ProductForm({ product }: { product?: Product }) {
     if (!files.length) return
     setUploading(true)
     setError('')
-
-    const results = await Promise.all(files.map(async file => {
-      const fd = new FormData()
-      fd.append('file', file)
-      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
-      if (!res.ok) {
-        const d = await res.json()
-        throw new Error(d.error ?? 'Upload failed')
-      }
-      const { url } = await res.json()
-      return url as string
-    }))
-
-    setMedia(prev => [...prev, ...results])
+    try {
+      const results = await Promise.all(files.map(async file => {
+        const fd = new FormData()
+        fd.append('file', file)
+        const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
+        if (!res.ok) {
+          const d = await res.json()
+          throw new Error(d.error ?? 'Upload failed')
+        }
+        const { url } = await res.json()
+        return url as string
+      }))
+      setMedia(prev => [...prev, ...results])
+    } catch (err: any) {
+      setError(err.message ?? 'Upload failed')
+    }
     setUploading(false)
     e.target.value = ''
   }
@@ -58,7 +82,6 @@ export default function ProductForm({ product }: { product?: Product }) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
-
     const sizes = sizesRaw.split(',').map(s => s.trim()).filter(Boolean)
     const payload = {
       name,
@@ -70,7 +93,6 @@ export default function ProductForm({ product }: { product?: Product }) {
       sizes,
       active,
     }
-
     startTransition(async () => {
       const url = product ? `/api/admin/products/${product.id}` : '/api/admin/products'
       const method = product ? 'PATCH' : 'POST'
@@ -79,7 +101,6 @@ export default function ProductForm({ product }: { product?: Product }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
-
       if (!res.ok) {
         const d = await res.json()
         setError(d.error ?? 'Something went wrong')
@@ -91,151 +112,163 @@ export default function ProductForm({ product }: { product?: Product }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       <div>
-        <label className="block text-sm font-medium text-zinc-700 mb-1">Product name</label>
-        <input
-          type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          className="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-black transition-colors"
-          required
-        />
+        <label style={labelStyle}>Product name</label>
+        <input type="text" value={name} onChange={e => setName(e.target.value)} required style={inputStyle} />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-zinc-700 mb-1">Description</label>
+        <label style={labelStyle}>Description</label>
         <textarea
           value={description}
           onChange={e => setDescription(e.target.value)}
           rows={3}
-          className="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-black transition-colors resize-none"
+          style={{
+            ...inputStyle, height: 'auto', padding: '10px 14px',
+            resize: 'vertical', lineHeight: 1.5,
+          }}
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <div>
-          <label className="block text-sm font-medium text-zinc-700 mb-1">Price (€)</label>
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            value={price}
-            onChange={e => setPrice(e.target.value)}
-            className="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-black transition-colors"
-            required
-          />
+          <label style={labelStyle}>Price (€)</label>
+          <input type="number" min="0" step="0.01" value={price} onChange={e => setPrice(e.target.value)} required style={inputStyle} />
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-700 mb-1">Stock</label>
-          <input
-            type="number"
-            min="0"
-            value={stock}
-            onChange={e => setStock(e.target.value)}
-            className="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-black transition-colors"
-            required
-          />
+          <label style={labelStyle}>Stock</label>
+          <input type="number" min="0" value={stock} onChange={e => setStock(e.target.value)} required style={inputStyle} />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-zinc-700 mb-1">Category</label>
-        <select
-          value={category}
-          onChange={e => setCategory(e.target.value)}
-          className="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-black transition-colors bg-white"
-        >
+        <label style={labelStyle}>Category</label>
+        <select value={category} onChange={e => setCategory(e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
           {CATEGORIES.map(c => (
             <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
           ))}
         </select>
       </div>
 
-      {/* Media upload */}
       <div>
-        <label className="block text-sm font-medium text-zinc-700 mb-2">Photos & Videos</label>
-
+        <label style={labelStyle}>Photos & Videos</label>
         {media.length > 0 && (
-          <div className="grid grid-cols-3 gap-2 mb-3">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 10 }}>
             {media.map(url => (
-              <div key={url} className="relative aspect-square rounded-lg overflow-hidden bg-zinc-100 group">
+              <div key={url} style={{ position: 'relative', aspectRatio: '1', borderRadius: 8, overflow: 'hidden', background: '#e6dac4' }}>
                 {isVideo(url) ? (
-                  <div className="w-full h-full flex items-center justify-center bg-zinc-800">
-                    <Play size={24} className="text-white" fill="white" />
-                    <span className="absolute bottom-1 left-1 text-[9px] text-white bg-black/50 px-1 rounded">VIDEO</span>
+                  <div style={{ width: '100%', height: '100%', background: '#2c2520', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 4 }}>
+                    <span style={{ color: '#fbf7ef', fontSize: 20 }}>▶</span>
+                    <span style={{ fontFamily: F.mono, fontSize: 9, color: 'rgba(251,247,239,0.6)', letterSpacing: '0.06em' }}>VIDEO</span>
                   </div>
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={url} alt="" className="w-full h-full object-cover" />
+                  <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 )}
                 <button
                   type="button"
                   onClick={() => removeMedia(url)}
-                  className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{
+                    position: 'absolute', top: 4, right: 4,
+                    width: 20, height: 20, borderRadius: 999,
+                    background: 'rgba(44,37,32,0.7)', color: '#fbf7ef',
+                    border: 'none', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 11, lineHeight: 1,
+                  }}
                 >
-                  <X size={11} />
+                  ×
                 </button>
               </div>
             ))}
           </div>
         )}
-
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*,video/*"
-          multiple
-          onChange={handleFileChange}
-          className="hidden"
-        />
+        <input ref={fileRef} type="file" accept="image/*,video/*" multiple onChange={handleFileChange} style={{ display: 'none' }} />
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
           disabled={uploading}
-          className="flex items-center gap-2 border border-dashed border-zinc-300 rounded-lg px-4 py-3 text-sm text-zinc-500 hover:border-zinc-400 hover:text-zinc-700 transition-colors w-full justify-center disabled:opacity-50"
+          style={{
+            width: '100%', padding: '12px',
+            border: '0.5px dashed rgba(44,37,32,0.25)',
+            borderRadius: 10, background: 'transparent',
+            fontFamily: F.body, fontSize: 13, color: '#6b5e52',
+            cursor: uploading ? 'not-allowed' : 'pointer',
+            opacity: uploading ? 0.6 : 1,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+          }}
         >
-          <Upload size={15} />
-          {uploading ? 'Uploading…' : 'Upload photos or videos'}
+          ↑ {uploading ? 'Uploading…' : 'Upload photos or videos'}
         </button>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-zinc-700 mb-1">Sizes (comma separated)</label>
+        <label style={labelStyle}>Sizes (comma separated)</label>
         <input
           type="text"
           value={sizesRaw}
           onChange={e => setSizesRaw(e.target.value)}
           placeholder="XS, S, M, L, XL"
-          className="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-black transition-colors"
+          style={inputStyle}
         />
       </div>
 
-      <div className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          id="active"
-          checked={active}
-          onChange={e => setActive(e.target.checked)}
-          className="rounded"
-        />
-        <label htmlFor="active" className="text-sm font-medium text-zinc-700">Active (visible to customers)</label>
-      </div>
+      <label style={{ display: 'inline-flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
+        <div
+          onClick={() => setActive(v => !v)}
+          style={{
+            width: 16, height: 16, borderRadius: 4,
+            border: '0.5px solid rgba(44,37,32,0.18)',
+            background: active ? '#2c2520' : '#fbf7ef',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', flexShrink: 0,
+          }}
+        >
+          {active && (
+            <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+              <path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="#fbf7ef" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          )}
+        </div>
+        <span style={{ fontFamily: F.body, fontSize: 13, color: '#2c2520' }}>
+          Visible to customers
+        </span>
+      </label>
 
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && (
+        <div style={{
+          background: 'rgba(155,77,77,0.08)', border: '0.5px solid #9b4d4d',
+          borderRadius: 8, padding: '10px 14px',
+          fontSize: 13, color: '#9b4d4d',
+        }}>
+          {error}
+        </div>
+      )}
 
-      <div className="flex gap-3 pt-2">
+      <div style={{ display: 'flex', gap: 10, paddingTop: 4 }}>
         <button
           type="submit"
           disabled={isPending || uploading}
-          className="bg-black text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-zinc-800 transition-colors disabled:opacity-50"
+          style={{
+            padding: '10px 22px', borderRadius: 999,
+            background: '#2c2520', color: '#fbf7ef',
+            border: 'none', fontSize: 13, fontWeight: 500,
+            fontFamily: F.body, cursor: isPending || uploading ? 'not-allowed' : 'pointer',
+            opacity: isPending || uploading ? 0.6 : 1,
+          }}
         >
           {isPending ? 'Saving…' : product ? 'Save changes' : 'Add product'}
         </button>
         <button
           type="button"
           onClick={() => router.back()}
-          className="border border-zinc-200 px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-zinc-50 transition-colors"
+          style={{
+            padding: '10px 22px', borderRadius: 999,
+            background: 'transparent', color: '#2c2520',
+            border: '0.5px solid rgba(44,37,32,0.18)',
+            fontSize: 13, fontFamily: F.body, cursor: 'pointer',
+          }}
         >
           Cancel
         </button>
