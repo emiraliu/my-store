@@ -4,12 +4,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Truck, Banknote, Check, Minus, Plus } from 'lucide-react'
 import { useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { useCart } from '@/components/CartProvider'
 import { getToneColor } from '@/lib/tones'
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, total, clearCart } = useCart()
+  const { items, removeItem, updateQuantity, total } = useCart()
   const [toast, setToast] = useState<string | null>(null)
+  const router = useRouter()
 
   const showToast = useCallback((msg: string) => {
     setToast(msg)
@@ -21,8 +23,7 @@ export default function CartPage() {
   const itemCount = items.reduce((n, i) => n + i.quantity, 0)
 
   function handlePlaceOrder() {
-    clearCart()
-    showToast('Order placed — courier will contact you')
+    router.push('/checkout')
   }
 
   if (items.length === 0) {
@@ -188,7 +189,7 @@ export default function CartPage() {
       {/* Floating CTA */}
       <div style={{
         position: 'fixed',
-        left: 16, right: 16, bottom: 30,
+        left: 16, right: 16, bottom: 100,
         background: 'rgba(251,247,239,0.92)',
         backdropFilter: 'blur(18px) saturate(160%)',
         WebkitBackdropFilter: 'blur(18px) saturate(160%)',

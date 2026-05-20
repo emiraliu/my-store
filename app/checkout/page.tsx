@@ -4,6 +4,28 @@ import { useState, useTransition, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/components/CartProvider'
 import { createClient } from '@/lib/supabase/client'
+import { Check } from 'lucide-react'
+
+const F = {
+  display: "var(--font-cormorant), 'Times New Roman', serif",
+  body:    "var(--font-dm-sans), system-ui, sans-serif",
+  mono:    "var(--font-dm-mono), monospace",
+}
+
+const inputStyle: React.CSSProperties = {
+  height: 48, borderRadius: 10,
+  border: '0.5px solid rgba(44,37,32,0.18)',
+  background: '#fbf7ef',
+  padding: '0 14px',
+  fontSize: 14, fontFamily: F.body,
+  color: '#2c2520', outline: 'none',
+  boxSizing: 'border-box', width: '100%',
+}
+
+const labelStyle: React.CSSProperties = {
+  fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em',
+  textTransform: 'uppercase', color: '#6b5e52', display: 'block', marginBottom: 8,
+}
 
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart()
@@ -13,6 +35,9 @@ export default function CheckoutPage() {
   const [error, setError] = useState('')
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
+
+  const shipping = total === 0 ? 0 : total >= 100 ? 0 : 4.90
+  const grandTotal = total + shipping
 
   useEffect(() => {
     async function loadProfile() {
@@ -46,7 +71,7 @@ export default function CheckoutPage() {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        router.push('/register')
+        router.push('/login')
         return
       }
 
@@ -77,84 +102,159 @@ export default function CheckoutPage() {
       })
 
       clearCart()
-      router.push(`/profile?ordered=1`)
+      router.push('/profile?ordered=1')
     })
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-2xl font-bold mb-8">Checkout</h1>
+    <div style={{ background: 'var(--c-bg)', minHeight: '100dvh', paddingBottom: 120 }}>
+      <style>{`
+        .co-grid { display: flex; flex-direction: column; gap: 28px; padding: 0 20px; }
+        @media (min-width: 680px) {
+          .co-grid { flex-direction: row; align-items: flex-start; max-width: 800px; margin: 0 auto; padding: 0 28px; }
+          .co-form-col { flex: 1 1 0; }
+          .co-summary-col { flex: 0 0 280px; }
+        }
+      `}</style>
 
-      <div className="grid md:grid-cols-2 gap-12">
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <h2 className="font-semibold text-lg">Delivery details</h2>
+      {/* Header */}
+      <div style={{ padding: '60px 20px 24px' }}>
+        <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#6b5e52', marginBottom: 4 }}>
+          CHECKOUT
+        </div>
+        <div style={{ fontFamily: F.display, fontSize: 36, fontWeight: 500, color: '#2c2520' }}>
+          Delivery<em style={{ fontStyle: 'italic', color: '#b5704d' }}>.</em>
+        </div>
+      </div>
 
-          <div>
-            <label className="block text-sm font-medium text-zinc-700 mb-1">Full name</label>
-            <input
-              type="text"
-              value={fullName}
-              onChange={e => setFullName(e.target.value)}
-              className="w-full border border-zinc-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-black transition-colors"
-              required
-            />
-          </div>
+      <div className="co-grid">
+        {/* Form */}
+        <div className="co-form-col">
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <div>
+              <label style={labelStyle}>Full name</label>
+              <input
+                type="text"
+                value={fullName}
+                onChange={e => setFullName(e.target.value)}
+                placeholder="Your name"
+                required
+                style={inputStyle}
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-zinc-700 mb-1">Phone number</label>
-            <input
-              type="tel"
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-              placeholder="+1234567890"
-              className="w-full border border-zinc-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-black transition-colors"
-              required
-            />
-          </div>
+            <div>
+              <label style={labelStyle}>Phone number</label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                placeholder="+355 69 000 0000"
+                required
+                style={inputStyle}
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-zinc-700 mb-1">Delivery address</label>
-            <textarea
-              value={address}
-              onChange={e => setAddress(e.target.value)}
-              rows={3}
-              placeholder="Street, city, postal code..."
-              className="w-full border border-zinc-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-black transition-colors resize-none"
-              required
-            />
-          </div>
+            <div>
+              <label style={labelStyle}>Delivery address</label>
+              <textarea
+                value={address}
+                onChange={e => setAddress(e.target.value)}
+                rows={3}
+                placeholder="Street, city, postal code..."
+                required
+                style={{
+                  ...inputStyle, height: 'auto', padding: '12px 14px',
+                  resize: 'none', lineHeight: 1.5,
+                } as React.CSSProperties}
+              />
+            </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+            {/* COD note */}
+            <div style={{
+              padding: '14px 16px', borderRadius: 12,
+              background: 'rgba(44,37,32,0.05)',
+              border: '0.5px solid rgba(44,37,32,0.10)',
+              fontSize: 12.5, color: '#6b5e52', lineHeight: 1.5,
+            }}>
+              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#2c2520', marginBottom: 6 }}>
+                Cash on delivery
+              </div>
+              After placing your order you'll receive an SMS. Reply <strong style={{ color: '#2c2520' }}>YES</strong> to confirm. You pay the courier in cash when the order arrives.
+            </div>
 
-          <div className="bg-zinc-50 rounded-xl p-4 text-sm text-zinc-600">
-            <p className="font-medium text-zinc-800 mb-1">Cash on delivery</p>
-            <p>After placing your order, you&apos;ll receive an SMS. Reply <strong>YES</strong> to confirm. You pay when the order arrives.</p>
-          </div>
+            {error && (
+              <div style={{
+                background: 'rgba(155,77,77,0.08)', border: '0.5px solid #9b4d4d',
+                borderRadius: 8, padding: '10px 14px',
+                fontSize: 13, color: '#9b4d4d',
+              }}>
+                {error}
+              </div>
+            )}
 
-          <button
-            type="submit"
-            disabled={isPending}
-            className="w-full bg-black text-white py-4 rounded-xl font-medium hover:bg-zinc-800 transition-colors disabled:opacity-50"
-          >
-            {isPending ? 'Placing order...' : 'Place order'}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={isPending}
+              style={{
+                width: '100%', height: 52, borderRadius: 999,
+                background: '#2c2520', color: '#fbf7ef',
+                border: 'none', fontSize: 14, fontWeight: 500,
+                letterSpacing: '0.03em', cursor: isPending ? 'not-allowed' : 'pointer',
+                opacity: isPending ? 0.7 : 1,
+                fontFamily: F.body,
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              }}
+            >
+              {isPending ? (
+                'Placing order…'
+              ) : (
+                <>
+                  <Check size={16} strokeWidth={2} />
+                  Place order · Pay €{grandTotal.toFixed(2)} on delivery
+                </>
+              )}
+            </button>
+          </form>
+        </div>
 
         {/* Order summary */}
-        <div>
-          <h2 className="font-semibold text-lg mb-4">Order summary</h2>
-          <div className="space-y-3">
-            {items.map(item => (
-              <div key={`${item.product_id}-${item.size}`} className="flex justify-between text-sm">
-                <span className="text-zinc-600">
-                  {item.name} {item.size && `(${item.size})`} × {item.quantity}
-                </span>
-                <span className="font-medium">${(item.price * item.quantity).toFixed(2)}</span>
+        <div className="co-summary-col">
+          <div style={{
+            background: '#fbf7ef',
+            border: '0.5px solid rgba(44,37,32,0.10)',
+            borderRadius: 16, overflow: 'hidden',
+          }}>
+            <div style={{ padding: '16px 18px 12px', borderBottom: '0.5px solid rgba(44,37,32,0.08)' }}>
+              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b5e52' }}>
+                Order summary
               </div>
-            ))}
-            <div className="border-t border-zinc-100 pt-3 flex justify-between font-semibold">
-              <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+            </div>
+            <div style={{ padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {items.map(item => (
+                <div key={`${item.product_id}-${item.size}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
+                  <span style={{ fontSize: 12.5, color: '#6b5e52', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {item.name}{item.size ? ` (${item.size})` : ''} ×{item.quantity}
+                  </span>
+                  <span style={{ fontFamily: F.mono, fontSize: 12, flexShrink: 0, color: '#2c2520' }}>
+                    €{(item.price * item.quantity).toFixed(2)}
+                  </span>
+                </div>
+              ))}
+              <div style={{ height: 1, background: 'rgba(44,37,32,0.08)', margin: '4px 0' }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: 12.5, color: '#6b5e52' }}>Subtotal</span>
+                <span style={{ fontFamily: F.mono, fontSize: 12 }}>€{total.toFixed(2)}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: 12.5, color: '#6b5e52' }}>Delivery</span>
+                <span style={{ fontFamily: F.mono, fontSize: 12 }}>{shipping === 0 ? 'Free' : `€${shipping.toFixed(2)}`}</span>
+              </div>
+              <div style={{ height: 1, background: 'rgba(44,37,32,0.08)', margin: '4px 0' }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: 13, fontWeight: 500, color: '#2c2520' }}>Total</span>
+                <span style={{ fontFamily: F.mono, fontSize: 13, fontWeight: 500, color: '#2c2520' }}>€{grandTotal.toFixed(2)}</span>
+              </div>
             </div>
           </div>
         </div>
