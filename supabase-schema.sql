@@ -5,6 +5,10 @@ create table profiles (
   id uuid references auth.users(id) on delete cascade primary key,
   phone text unique,
   full_name text,
+  surname text,
+  username text unique,
+  gender text,
+  age integer,
   address text,
   is_admin boolean default false,
   created_at timestamptz default now()
@@ -59,11 +63,15 @@ create policy "Admins manage orders" on orders for all using (
 create or replace function handle_new_user()
 returns trigger as $$
 begin
-  insert into profiles (id, phone, full_name)
+  insert into profiles (id, phone, full_name, surname, username, gender, age)
   values (
     new.id,
-    new.phone,
-    new.raw_user_meta_data->>'full_name'
+    new.raw_user_meta_data->>'phone',
+    new.raw_user_meta_data->>'full_name',
+    new.raw_user_meta_data->>'surname',
+    new.raw_user_meta_data->>'username',
+    new.raw_user_meta_data->>'gender',
+    (new.raw_user_meta_data->>'age')::integer
   )
   on conflict (id) do nothing;
   return new;

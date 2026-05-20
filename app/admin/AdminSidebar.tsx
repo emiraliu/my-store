@@ -94,9 +94,23 @@ export default function AdminSidebar() {
         ))}
       </nav>
 
+      {/* Back to store */}
+      <div style={{ marginTop: 'auto', padding: '0 4px 8px' }}>
+        <Link href="/" style={{
+          display: 'flex', alignItems: 'center', gap: 8,
+          padding: '9px 10px', borderRadius: 8,
+          fontSize: 12, textDecoration: 'none',
+          color: '#6b5e52',
+          border: '0.5px solid rgba(44,37,32,0.10)',
+          fontFamily: F.body,
+        }}>
+          <span style={{ fontSize: 13 }}>←</span>
+          Back to store
+        </Link>
+      </div>
+
       {/* Footer */}
       <div style={{
-        marginTop: 'auto',
         padding: '12px 10px',
         display: 'flex', alignItems: 'center', gap: 10,
         borderTop: '0.5px solid rgba(44,37,32,0.10)',
