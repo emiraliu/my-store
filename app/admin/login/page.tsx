@@ -49,13 +49,22 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 50,
-      display: 'grid', gridTemplateColumns: '1fr 1fr',
-      fontFamily: F.body, color: '#2c2520',
-    }}>
+    <>
+    <style>{`
+      .sa-login-root { display: grid; grid-template-columns: 1fr 1fr; }
+      .sa-login-art  { display: flex; }
+      @media (max-width: 767px) {
+        .sa-login-root { grid-template-columns: 1fr; }
+        .sa-login-art  { display: none; }
+        .sa-login-form { padding: 48px 28px 60px !important; }
+      }
+    `}</style>
+    <div
+      className="sa-login-root"
+      style={{ position: 'fixed', inset: 0, zIndex: 50, fontFamily: F.body, color: '#2c2520' }}
+    >
       {/* ── Left art panel ── */}
-      <div style={{
+      <div className="sa-login-art" style={{
         background: '#7a5a48',
         backgroundImage: [
           'radial-gradient(circle at 20% 80%, rgba(217,179,154,0.35) 0, transparent 45%)',
@@ -104,10 +113,11 @@ export default function AdminLoginPage() {
       </div>
 
       {/* ── Right form panel ── */}
-      <div style={{
+      <div className="sa-login-form" style={{
         background: '#efe9df',
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
         padding: '56px 80px', position: 'relative',
+        overflowY: 'auto',
       }}>
         <div style={{
           position: 'absolute', top: 28, right: 28,
@@ -242,5 +252,6 @@ export default function AdminLoginPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

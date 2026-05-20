@@ -47,13 +47,22 @@ export default async function AdminDashboard() {
 
   return (
     <div style={{ fontFamily: F.body, color: '#2c2520' }}>
+      <style>{`
+        .adm-topbar { padding: 12px 20px; }
+        .adm-page-pad { padding: 20px 20px 60px; }
+        .adm-stats { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
+        .adm-stat-card { flex: 1 1 140px; min-width: calc(50% - 8px); }
+        @media (min-width: 768px) {
+          .adm-topbar { padding: 14px 28px; }
+          .adm-page-pad { padding: 28px 28px 60px; }
+          .adm-stat-card { min-width: 0; }
+        }
+      `}</style>
       {/* Topbar */}
-      <div style={{
+      <div className="adm-topbar" style={{
         display: 'flex', alignItems: 'center',
-        padding: '14px 28px',
         borderBottom: '0.5px solid rgba(44,37,32,0.10)',
-        gap: 14, flexShrink: 0,
-        background: '#efe9df',
+        gap: 14, flexShrink: 0, background: '#efe9df',
       }}>
         <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6b5e52' }}>
           Admin <span style={{ margin: '0 8px', opacity: 0.5 }}>/</span>
@@ -71,7 +80,7 @@ export default async function AdminDashboard() {
         </Link>
       </div>
 
-      <div style={{ padding: '28px 28px 60px' }}>
+      <div className="adm-page-pad">
         <h1 style={{
           fontFamily: F.display,
           fontSize: 38, fontWeight: 500, lineHeight: 1.05, letterSpacing: '-0.01em',
@@ -84,9 +93,9 @@ export default async function AdminDashboard() {
         </p>
 
         {/* Stat cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 28 }}>
+        <div className="adm-stats">
           {stats.map(card => (
-            <div key={card.label} style={{
+            <div key={card.label} className="adm-stat-card" style={{
               padding: '18px 20px 16px',
               background: '#fbf7ef',
               border: '0.5px solid rgba(44,37,32,0.10)',
@@ -128,7 +137,8 @@ export default async function AdminDashboard() {
           {!recentOrders || recentOrders.length === 0 ? (
             <p style={{ padding: '16px 20px', color: '#6b5e52', fontSize: 13 }}>No orders yet.</p>
           ) : (
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
+            <table style={{ width: '100%', minWidth: 520, borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
                 <tr>
                   {['Order', 'Customer', 'Total', 'Status', 'Placed'].map(h => (
@@ -181,6 +191,7 @@ export default async function AdminDashboard() {
                 })}
               </tbody>
             </table>
+            </div>
           )}
         </div>
       </div>

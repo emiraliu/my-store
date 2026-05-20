@@ -37,13 +37,19 @@ export default async function AdminProductsPage({
 
   return (
     <div style={{ fontFamily: F.body, color: '#2c2520' }}>
+      <style>{`
+        .adm-topbar { padding: 12px 16px; }
+        .adm-page-pad { padding: 20px 16px 60px; }
+        @media (min-width: 768px) {
+          .adm-topbar { padding: 14px 28px; }
+          .adm-page-pad { padding: 28px 28px 60px; }
+        }
+      `}</style>
       {/* Topbar */}
-      <div style={{
+      <div className="adm-topbar" style={{
         display: 'flex', alignItems: 'center',
-        padding: '14px 28px',
         borderBottom: '0.5px solid rgba(44,37,32,0.10)',
-        gap: 14,
-        background: '#efe9df',
+        gap: 10, background: '#efe9df',
       }}>
         <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6b5e52' }}>
           Admin <span style={{ margin: '0 8px', opacity: 0.5 }}>/</span>
@@ -61,7 +67,7 @@ export default async function AdminProductsPage({
         </Link>
       </div>
 
-      <div style={{ padding: '28px 28px 60px' }}>
+      <div className="adm-page-pad">
         <h1 style={{
           fontFamily: F.display,
           fontSize: 38, fontWeight: 500, lineHeight: 1.05, letterSpacing: '-0.01em',
@@ -95,7 +101,8 @@ export default async function AdminProductsPage({
           {filtered.length === 0 ? (
             <p style={{ padding: '24px 20px', color: '#6b5e52', fontSize: 13 }}>No products found.</p>
           ) : (
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
+            <table style={{ width: '100%', minWidth: 640, borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
                 <tr>
                   {['Product', 'Category', 'Price', 'Stock', 'Status', 'Added', ''].map((h, i) => (
@@ -177,6 +184,7 @@ export default async function AdminProductsPage({
                 })}
               </tbody>
             </table>
+            </div>
           )}
         </div>
       </div>
