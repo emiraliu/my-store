@@ -1,24 +1,47 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useRef } from 'react'
 import { Home, Heart, ShoppingBag, User } from 'lucide-react'
 import { useCart } from './CartProvider'
 import { useWishlist } from './WishlistProvider'
 
 export default function BottomNav() {
   const pathname = usePathname()
+  const router = useRouter()
   const { count } = useCart()
   const { wishlist } = useWishlist()
+  const tapCount = useRef(0)
+  const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   if (pathname.startsWith('/products/') || pathname.startsWith('/admin')) return null
 
+  function handleYouTap(e: React.MouseEvent) {
+    e.preventDefault()
+    tapCount.current += 1
+
+    if (tapTimer.current) clearTimeout(tapTimer.current)
+
+    if (tapCount.current >= 5) {
+      tapCount.current = 0
+      router.push('/admin/login')
+      return
+    }
+
+    tapTimer.current = setTimeout(() => {
+      tapCount.current = 0
+      router.push('/profile')
+    }, 600)
+  }
+
   const tabs = [
-    { href: '/',          icon: Home,        label: 'Shop' },
-    { href: '/wishlist',  icon: Heart,       label: 'Saved' },
-    { href: '/cart',      icon: ShoppingBag, label: 'Bag' },
-    { href: '/profile',   icon: User,        label: 'You' },
+    { href: '/',         icon: Home,        label: 'Shop' },
+    { href: '/wishlist', icon: Heart,       label: 'Saved' },
+    { href: '/cart',     icon: ShoppingBag, label: 'Bag' },
   ]
+
+  const youActive = pathname === '/profile'
 
   return (
     <nav style={{
@@ -77,6 +100,32 @@ export default function BottomNav() {
           </Link>
         )
       })}
+
+      {/* You tab — 5 taps opens admin */}
+      <button onClick={handleYouTap} style={{
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
+        color: youActive ? 'var(--c-ink)' : 'var(--c-ink-mute)',
+        fontSize: 10,
+        fontFamily: 'var(--f-body)',
+        letterSpacing: '0.03em',
+        padding: '6px 4px',
+        height: '100%',
+        justifyContent: 'center',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        width: '100%',
+      }}>
+        <User size={20} strokeWidth={1.5} />
+        <span>You</span>
+        <span style={{
+          width: 4, height: 4, borderRadius: 50,
+          background: 'var(--c-accent)',
+          marginTop: 2,
+          opacity: youActive ? 1 : 0,
+          transition: 'opacity 0.18s',
+        }} />
+      </button>
     </nav>
   )
 }
