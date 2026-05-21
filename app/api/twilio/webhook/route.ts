@@ -1,10 +1,21 @@
 import { createAdminClient } from '@/lib/supabase/server'
-import { sendOrderConfirmedSMS } from '@/lib/twilio'
+import { sendOrderConfirmedSMS, validateTwilioSignature } from '@/lib/twilio'
 import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
   const body = await req.text()
   const params = Object.fromEntries(new URLSearchParams(body))
+
+  const signature = req.headers.get('x-twilio-signature') ?? ''
+  const isValid = validateTwilioSignature(
+    process.env.TWILIO_AUTH_TOKEN!,
+    signature,
+    req.url,
+    params
+  )
+  if (!isValid) {
+    return new Response('Forbidden', { status: 403 })
+  }
 
   const from: string = params.From ?? ''
   const messageBody: string = (params.Body ?? '').trim().toUpperCase()

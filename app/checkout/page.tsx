@@ -63,7 +63,7 @@ export default function CheckoutPage() {
     return null
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
     setError('')
 

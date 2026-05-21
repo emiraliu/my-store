@@ -11,7 +11,7 @@ export async function sendOrderConfirmationSMS(phone: string, orderId: string, t
   const client = getTwilioClient()
   const shortId = orderId.slice(0, 8).toUpperCase()
   await client.messages.create({
-    body: `Your order #${shortId} has been placed! Total: $${total.toFixed(2)} - Cash on delivery. Reply YES to confirm your order.`,
+    body: `Your order #${shortId} has been placed! Total: €${total.toFixed(2)} - Cash on delivery. Reply YES to confirm your order.`,
     from: process.env.TWILIO_PHONE_NUMBER!,
     to: phone,
   })
