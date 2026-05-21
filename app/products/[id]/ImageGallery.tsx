@@ -15,6 +15,43 @@ interface Props {
   firstWord: string
 }
 
+const MAX_VISIBLE_DOTS = 5
+
+function Dots({ total, index }: { total: number; index: number }) {
+  if (total <= 1) return null
+
+  // Compute a sliding window of up to MAX_VISIBLE_DOTS centered on the active index
+  const half = Math.floor(MAX_VISIBLE_DOTS / 2)
+  let start = Math.max(0, index - half)
+  const end = Math.min(total - 1, start + MAX_VISIBLE_DOTS - 1)
+  if (end - start < MAX_VISIBLE_DOTS - 1) start = Math.max(0, end - MAX_VISIBLE_DOTS + 1)
+
+  return (
+    <div style={{
+      position: 'absolute', bottom: 14, left: '50%', transform: 'translateX(-50%)',
+      display: 'flex', gap: 5, alignItems: 'center',
+    }}>
+      {Array.from({ length: end - start + 1 }, (_, k) => {
+        const i = start + k
+        const isActive = i === index
+        // Edge dots hint there are more images beyond the visible window
+        const isEdge = (i === start && start > 0) || (i === end && end < total - 1)
+        return (
+          <span key={i} style={{
+            width: isActive ? 18 : isEdge ? 4 : 5,
+            height: isActive ? 5 : isEdge ? 4 : 5,
+            borderRadius: 999,
+            background: isActive ? 'var(--c-ink)' : 'rgba(44,37,32,0.35)',
+            opacity: isEdge ? 0.45 : 1,
+            transition: 'width 0.25s cubic-bezier(0.4,0,0.2,1), opacity 0.25s',
+            flexShrink: 0,
+          }} />
+        )
+      })}
+    </div>
+  )
+}
+
 export default function ImageGallery({ images, alt, toneColor, firstWord }: Props) {
   const [index, setIndex] = useState(0)
   const touchStartX = useRef(0)
@@ -30,7 +67,24 @@ export default function ImageGallery({ images, alt, toneColor, firstWord }: Prop
     if (delta < 0 && index > 0) setIndex(i => i - 1)
   }
 
-  const current = images[index] ?? null
+  if (images.length === 0) {
+    return (
+      <div style={{
+        position: 'relative', width: '100%', aspectRatio: '3/4', overflow: 'hidden',
+        borderRadius: '0 0 24px 24px', backgroundColor: toneColor,
+        backgroundImage: 'repeating-linear-gradient(135deg, rgba(44,37,32,0.025) 0 1px, transparent 1px 14px)',
+      }}>
+        <span style={{
+          position: 'absolute', left: 12, bottom: 12,
+          fontFamily: 'var(--f-mono)', fontSize: 9, letterSpacing: '0.06em',
+          textTransform: 'uppercase', color: 'rgba(44,37,32,0.65)',
+          background: 'rgba(251,247,239,0.7)', padding: '2px 5px', borderRadius: 3,
+        }}>
+          PHOTO · {firstWord}
+        </span>
+      </div>
+    )
+  }
 
   return (
     <div
@@ -38,52 +92,38 @@ export default function ImageGallery({ images, alt, toneColor, firstWord }: Prop
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {!current ? (
-        <div style={{
-          width: '100%', height: '100%',
-          backgroundColor: toneColor,
-          backgroundImage: 'repeating-linear-gradient(135deg, rgba(44,37,32,0.025) 0 1px, transparent 1px 14px)',
-        }}>
-          <span style={{
-            position: 'absolute', left: 12, bottom: 12,
-            fontFamily: 'var(--f-mono)', fontSize: 9, letterSpacing: '0.06em',
-            textTransform: 'uppercase', color: 'rgba(44,37,32,0.65)',
-            background: 'rgba(251,247,239,0.7)', padding: '2px 5px', borderRadius: 3,
-          }}>
-            PHOTO · {firstWord}
-          </span>
-        </div>
-      ) : isVideo(current) ? (
-        <video
-          src={current}
-          autoPlay muted loop playsInline
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-        />
-      ) : (
-        <Image
-          src={current}
-          alt={alt}
-          fill
-          style={{ objectFit: 'cover' }}
-          sizes="100vw"
-          priority={index === 0}
-        />
-      )}
+      {/* Sliding strip — all images in a row, translated to show the active one */}
+      <div style={{
+        display: 'flex',
+        width: `${images.length * 100}%`,
+        height: '100%',
+        transform: `translateX(${(-index * 100) / images.length}%)`,
+        transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+        willChange: 'transform',
+      }}>
+        {images.map((img, i) => (
+          <div key={i} style={{ width: `${100 / images.length}%`, height: '100%', flexShrink: 0, position: 'relative' }}>
+            {isVideo(img) ? (
+              <video
+                src={img}
+                autoPlay={i === index} muted loop playsInline
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            ) : (
+              <Image
+                src={img}
+                alt={`${alt} ${i + 1}`}
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="100vw"
+                priority={i === 0}
+              />
+            )}
+          </div>
+        ))}
+      </div>
 
-      {images.length > 1 && (
-        <div style={{
-          position: 'absolute', bottom: 14, left: '50%', transform: 'translateX(-50%)',
-          display: 'flex', gap: 5,
-        }}>
-          {images.map((_, i) => (
-            <span key={i} style={{
-              width: i === index ? 18 : 5, height: 5, borderRadius: 999,
-              background: i === index ? 'var(--c-ink)' : 'rgba(44,37,32,0.3)',
-              transition: 'width 0.2s',
-            }} />
-          ))}
-        </div>
-      )}
+      <Dots total={images.length} index={index} />
     </div>
   )
 }
