@@ -12,27 +12,33 @@ export default function BottomNav() {
   const router = useRouter()
   const { count } = useCart()
   const { wishlist } = useWishlist()
-  const tapCount = useRef(0)
-  const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const tapTimes = useRef<number[]>([])
 
   if (pathname.startsWith('/products/') || pathname.startsWith('/admin')) return null
 
   function handleYouTap(e: React.MouseEvent) {
     e.preventDefault()
-    tapCount.current += 1
 
-    if (tapTimer.current) clearTimeout(tapTimer.current)
+    // Profile opens immediately — no delay
+    router.push('/profile')
 
-    if (tapCount.current >= 5) {
-      tapCount.current = 0
-      router.push('/admin/login')
-      return
+    // Record tap; discard anything outside the 1.5 s window
+    const now = Date.now()
+    tapTimes.current.push(now)
+    tapTimes.current = tapTimes.current.filter(t => now - t <= 1500)
+
+    if (tapTimes.current.length === 5) {
+      const times = tapTimes.current
+      tapTimes.current = [] // reset regardless of outcome
+
+      // All 4 gaps must have a coefficient of variation < 0.5 (consistent rhythm)
+      const gaps = times.slice(1).map((t, i) => t - times[i])
+      const mean = gaps.reduce((a, b) => a + b, 0) / gaps.length
+      if (mean > 0) {
+        const cv = Math.sqrt(gaps.reduce((a, g) => a + (g - mean) ** 2, 0) / gaps.length) / mean
+        if (cv < 0.5) router.push('/admin/login')
+      }
     }
-
-    tapTimer.current = setTimeout(() => {
-      tapCount.current = 0
-      router.push('/profile')
-    }, 600)
   }
 
   const tabs = [
@@ -101,7 +107,7 @@ export default function BottomNav() {
         )
       })}
 
-      {/* You tab — 5 taps opens admin */}
+      {/* You tab — 5 consistent taps within 1.5 s opens admin */}
       <button onClick={handleYouTap} style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
         color: youActive ? 'var(--c-ink)' : 'var(--c-ink-mute)',
