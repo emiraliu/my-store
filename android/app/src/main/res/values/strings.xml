@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Hidaya Wear</string>
+    <string name="title_activity_main">Hidaya Wear</string>
+    <string name="package_name">com.hidayawear.app</string>
+    <string name="custom_url_scheme">com.hidayawear.app</string>
+</resources>
