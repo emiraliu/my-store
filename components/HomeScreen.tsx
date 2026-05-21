@@ -31,7 +31,7 @@ export default function HomeScreen({ products }: { products: Product[] }) {
       list = list.filter(p => p.category.toLowerCase() === category)
     }
     if (filters.size?.length) {
-      list = list.filter(p => p.sizes.some(s => filters.size!.includes(s)))
+      list = list.filter(p => Object.keys(p.sizes).some(s => filters.size!.includes(s)))
     }
     const price = filters.price?.[0]
     if (price === 'Under €60')      list = list.filter(p => p.price < 60)

@@ -22,7 +22,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
   }, [])
 
   function handleAdd() {
-    if (product.sizes.length > 0 && !selectedSize) {
+    if (Object.keys(product.sizes).length > 0 && !selectedSize) {
       showToast('Please choose a size')
       return
     }
