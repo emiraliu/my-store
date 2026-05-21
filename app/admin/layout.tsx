@@ -8,7 +8,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           .adm-scroll { padding-top: 56px; }
         }
       `}</style>
-      <div style={{ position: 'fixed', inset: 0, zIndex: 40, display: 'flex', background: '#efe9df' }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 40, display: 'flex', background: '#f5f5f5' }}>
         <AdminSidebar />
         <div className="adm-scroll" style={{ flex: 1, minWidth: 0, overflowY: 'auto' }}>
           {children}

@@ -22,8 +22,8 @@ function pillStyle(tone: string): React.CSSProperties {
   if (tone === 'good')    return { color: '#4d6b4d', background: 'rgba(77,107,77,0.10)' }
   if (tone === 'warn')    return { color: '#b58a4d', background: 'rgba(181,138,77,0.12)' }
   if (tone === 'bad')     return { color: '#9b4d4d', background: 'rgba(155,77,77,0.12)' }
-  if (tone === 'cod')     return { color: '#fbf7ef', background: '#2c2520' }
-  return { color: '#6b5e52', background: 'rgba(44,37,32,0.05)' }
+  if (tone === 'cod')     return { color: '#ffffff', background: '#000000' }
+  return { color: '#6e6e6e', background: 'rgba(0,0,0,0.05)' }
 }
 
 export default async function AdminOrdersPage({
@@ -69,7 +69,7 @@ export default async function AdminOrdersPage({
   ]
 
   return (
-    <div style={{ fontFamily: F.body, color: '#2c2520' }}>
+    <div style={{ fontFamily: F.body, color: '#000000' }}>
       <style>{`
         .adm-topbar { padding: 12px 16px; }
         .adm-page-pad { padding: 20px 16px 60px; }
@@ -81,12 +81,12 @@ export default async function AdminOrdersPage({
       {/* Topbar */}
       <div className="adm-topbar" style={{
         display: 'flex', alignItems: 'center',
-        borderBottom: '0.5px solid rgba(44,37,32,0.10)',
-        gap: 10, background: '#efe9df',
+        borderBottom: '0.5px solid rgba(0,0,0,0.10)',
+        gap: 10, background: '#f5f5f5',
       }}>
-        <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6b5e52' }}>
+        <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6e6e6e' }}>
           Admin <span style={{ margin: '0 8px', opacity: 0.5 }}>/</span>
-          <strong style={{ color: '#2c2520', fontWeight: 500 }}>Orders</strong>
+          <strong style={{ color: '#000000', fontWeight: 500 }}>Orders</strong>
         </div>
       </div>
 
@@ -96,9 +96,9 @@ export default async function AdminOrdersPage({
           fontSize: 38, fontWeight: 500, lineHeight: 1.05, letterSpacing: '-0.01em',
           margin: '0 0 6px',
         }}>
-          Orders<em style={{ fontStyle: 'italic', color: '#b5704d' }}>.</em>
+          Orders<em style={{ fontStyle: 'italic', color: '#000000' }}>.</em>
         </h1>
-        <p style={{ fontFamily: F.display, fontStyle: 'italic', fontSize: 14, color: '#6b5e52', margin: '0 0 24px' }}>
+        <p style={{ fontFamily: F.display, fontStyle: 'italic', fontSize: 14, color: '#6e6e6e', margin: '0 0 24px' }}>
           All orders are paid in cash on delivery — collect after the customer accepts.
         </p>
 
@@ -109,9 +109,9 @@ export default async function AdminOrdersPage({
               display: 'inline-flex', alignItems: 'center',
               padding: '6px 11px', borderRadius: 999,
               fontSize: 12, textDecoration: 'none', whiteSpace: 'nowrap',
-              background: filter === id ? '#2c2520' : 'transparent',
-              color: filter === id ? '#fbf7ef' : '#2c2520',
-              border: filter === id ? '0.5px solid transparent' : '0.5px solid rgba(44,37,32,0.10)',
+              background: filter === id ? '#000000' : 'transparent',
+              color: filter === id ? '#ffffff' : '#000000',
+              border: filter === id ? '0.5px solid transparent' : '0.5px solid rgba(0,0,0,0.10)',
               fontFamily: F.body,
             }}>
               {label}
@@ -120,9 +120,9 @@ export default async function AdminOrdersPage({
         </div>
 
         {/* Table */}
-        <div style={{ background: '#fbf7ef', border: '0.5px solid rgba(44,37,32,0.10)', borderRadius: 14, overflow: 'hidden' }}>
+        <div style={{ background: '#ffffff', border: '0.5px solid rgba(0,0,0,0.10)', borderRadius: 14, overflow: 'hidden' }}>
           {filtered.length === 0 ? (
-            <p style={{ padding: '24px 20px', color: '#6b5e52', fontSize: 13 }}>No orders found.</p>
+            <p style={{ padding: '24px 20px', color: '#6e6e6e', fontSize: 13 }}>No orders found.</p>
           ) : (
             <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
             <table style={{ width: '100%', minWidth: 720, borderCollapse: 'collapse', fontSize: 13 }}>
@@ -132,9 +132,9 @@ export default async function AdminOrdersPage({
                     <th key={i} style={{
                       textAlign: 'left',
                       fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em',
-                      textTransform: 'uppercase', color: '#6b5e52', fontWeight: 500,
-                      padding: '12px 16px', borderBottom: '0.5px solid rgba(44,37,32,0.10)',
-                      background: '#f6f1e6',
+                      textTransform: 'uppercase', color: '#6e6e6e', fontWeight: 500,
+                      padding: '12px 16px', borderBottom: '0.5px solid rgba(0,0,0,0.10)',
+                      background: '#f5f5f5',
                     }}>
                       {h}
                     </th>
@@ -153,18 +153,18 @@ export default async function AdminOrdersPage({
                   const moreItems = order.items.length > 2 ? ` +${order.items.length - 2}` : ''
 
                   return (
-                    <tr key={order.id} style={{ borderBottom: '0.5px solid rgba(44,37,32,0.10)' }}>
+                    <tr key={order.id} style={{ borderBottom: '0.5px solid rgba(0,0,0,0.10)' }}>
                       <td style={{ padding: '14px 16px', fontFamily: F.mono, fontSize: 11.5 }}>
                         #{shortId}
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         <div style={{ fontWeight: 500 }}>{order.profiles?.full_name ?? '—'}</div>
-                        <div style={{ fontFamily: F.mono, fontSize: 10, color: '#6b5e52', marginTop: 2 }}>
+                        <div style={{ fontFamily: F.mono, fontSize: 10, color: '#6e6e6e', marginTop: 2 }}>
                           {order.phone}
                         </div>
                       </td>
                       <td style={{ padding: '14px 16px', maxWidth: 200 }}>
-                        <div style={{ fontSize: 12, color: '#6b5e52', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <div style={{ fontSize: 12, color: '#6e6e6e', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {itemSummary}{moreItems}
                         </div>
                       </td>
@@ -177,7 +177,7 @@ export default async function AdminOrdersPage({
                           padding: '3px 9px', borderRadius: 999,
                           fontFamily: F.mono, fontSize: 9.5,
                           letterSpacing: '0.08em', textTransform: 'uppercase',
-                          color: '#fbf7ef', background: '#2c2520',
+                          color: '#ffffff', background: '#000000',
                           whiteSpace: 'nowrap',
                         }}>
                           <span style={{ width: 5, height: 5, borderRadius: 999, background: 'currentColor' }} />
@@ -199,7 +199,7 @@ export default async function AdminOrdersPage({
                       <td style={{ padding: '14px 16px' }}>
                         <OrderStatusSelect orderId={order.id} currentStatus={order.status} />
                       </td>
-                      <td style={{ padding: '14px 16px', fontFamily: F.mono, fontSize: 10, color: '#6b5e52' }}>
+                      <td style={{ padding: '14px 16px', fontFamily: F.mono, fontSize: 10, color: '#6e6e6e' }}>
                         {date}
                       </td>
                       <td style={{ padding: '14px 16px' }}>

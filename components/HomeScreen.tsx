@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import Image from 'next/image'
 import { SlidersHorizontal } from 'lucide-react'
 import type { Product } from '@/lib/types'
 import ProductCard from './ProductCard'
@@ -58,27 +59,81 @@ export default function HomeScreen({ products }: { products: Product[] }) {
   return (
     <>
       {/* Brand hero */}
-      <div style={{ padding: '72px 24px 0', textAlign: 'center' }}>
-        <div style={{ fontFamily: 'var(--f-display)', fontWeight: 500, fontSize: 72, lineHeight: 0.9, marginBottom: 20 }}>
-          MyStore<span style={{ fontStyle: 'italic', color: 'var(--c-accent)' }}>.</span>
+      <div style={{ padding: '60px 20px 0' }}>
+        {/* Logo row */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <Image
+            src="/hidaya-logo.jpg"
+            alt="Store logo"
+            width={96}
+            height={96}
+            style={{ objectFit: 'contain' }}
+            priority
+          />
+          <button
+            onClick={() => setFiltersOpen(true)}
+            style={{
+              width: 40, height: 40, borderRadius: 999,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: 'transparent', border: '0.5px solid var(--c-line)',
+              color: 'var(--c-ink)', cursor: 'pointer',
+            }}
+            aria-label="Filters"
+          >
+            <SlidersHorizontal size={17} strokeWidth={1.6} />
+            {filterCount > 0 && (
+              <span style={{
+                position: 'absolute',
+                minWidth: 16, height: 16, padding: '0 4px', borderRadius: 999,
+                background: 'var(--c-accent)', color: 'var(--c-accent-ink)',
+                fontFamily: 'var(--f-mono)', fontSize: 9,
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                transform: 'translate(10px,-10px)',
+              }}>{filterCount}</span>
+            )}
+          </button>
         </div>
+
+        {/* Eyebrow */}
+        <div style={{
+          fontFamily: 'var(--f-mono)', fontSize: 10, letterSpacing: '0.08em',
+          textTransform: 'uppercase', color: 'var(--c-ink-mute)', marginBottom: 8,
+        }}>
+          New collection · Modest wear
+        </div>
+
+        {/* Tagline */}
         <div style={{
           fontFamily: 'var(--f-display)', fontStyle: 'italic',
-          fontSize: 20, lineHeight: 1.4, color: 'var(--c-ink-mute)',
-          maxWidth: 300, margin: '0 auto 28px',
+          fontSize: 20, lineHeight: 1.35, color: 'var(--c-ink)',
+          marginBottom: 18, maxWidth: 320,
         }}>
           Dress like the woman you{"'"}re becoming.
         </div>
+
+        {/* Marquee strip */}
         <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: 8,
-          padding: '6px 14px', borderRadius: 999,
-          background: 'var(--c-tag-bg)', border: '0.5px solid var(--c-line)',
-          fontFamily: 'var(--f-mono)', fontSize: 10,
-          letterSpacing: '0.06em', textTransform: 'uppercase',
-          color: 'var(--c-cod)', marginBottom: 28,
+          margin: '0 -20px 6px',
+          padding: '10px 0',
+          borderTop: '0.5px solid var(--c-line)',
+          borderBottom: '0.5px solid var(--c-line)',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
         }}>
-          <span style={{ width: 5, height: 5, borderRadius: 999, background: 'currentColor' }} />
-          Cash on delivery · No card needed
+          <div className="marquee-track">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <span key={i} style={{
+                fontFamily: 'var(--f-mono)', fontSize: 11,
+                letterSpacing: '0.06em', textTransform: 'uppercase',
+                display: 'inline-flex', alignItems: 'center', gap: 12,
+              }}>
+                Pay on delivery
+                <span style={{ width: 4, height: 4, borderRadius: 999, background: 'currentColor', display: 'inline-block', flexShrink: 0 }} />
+                Cash on arrival
+                <span style={{ width: 4, height: 4, borderRadius: 999, background: 'currentColor', display: 'inline-block', flexShrink: 0 }} />
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -89,28 +144,6 @@ export default function HomeScreen({ products }: { products: Product[] }) {
         padding: '6px 18px 14px',
         overflowX: 'auto',
       }}>
-        {/* Filter chip */}
-        <button onClick={() => setFiltersOpen(true)} style={{
-          display: 'inline-flex', alignItems: 'center', gap: 6,
-          padding: '7px 12px', borderRadius: 999,
-          background: 'transparent',
-          border: '0.5px solid var(--c-line)',
-          color: 'var(--c-ink)', fontSize: 12,
-          fontFamily: 'var(--f-body)',
-          cursor: 'pointer', flexShrink: 0, whiteSpace: 'nowrap',
-        }}>
-          <SlidersHorizontal size={14} strokeWidth={1.6} />
-          Filters
-          {filterCount > 0 && (
-            <span style={{
-              minWidth: 16, height: 16, padding: '0 4px', borderRadius: 999,
-              background: 'var(--c-accent)', color: 'var(--c-accent-ink)',
-              fontFamily: 'var(--f-mono)', fontSize: 9,
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            }}>{filterCount}</span>
-          )}
-        </button>
-
         {CATEGORIES.map(c => (
           <button key={c.id} onClick={() => setCategory(c.id)} style={{
             display: 'inline-flex', alignItems: 'center',

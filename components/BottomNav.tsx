@@ -51,12 +51,12 @@ export default function BottomNav() {
       display: 'grid',
       gridTemplateColumns: 'repeat(4, 1fr)',
       alignItems: 'center',
-      background: 'rgba(251, 247, 239, 0.86)',
+      background: 'rgba(255, 255, 255, 0.86)',
       backdropFilter: 'blur(20px) saturate(160%)',
       WebkitBackdropFilter: 'blur(20px) saturate(160%)',
       border: '0.5px solid var(--c-line)',
       borderRadius: 22,
-      boxShadow: '0 8px 30px rgba(44, 37, 32, 0.08)',
+      boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
       zIndex: 30,
     }}>
       {tabs.map(({ href, icon: Icon, label }) => {

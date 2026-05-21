@@ -52,7 +52,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
         borderRadius: 'var(--r-card)',
         overflow: 'hidden',
         backgroundColor: toneColor,
-        backgroundImage: 'repeating-linear-gradient(135deg, rgba(44,37,32,0.025) 0 1px, transparent 1px 14px)',
+        backgroundImage: 'repeating-linear-gradient(135deg, rgba(0,0,0,0.025) 0 1px, transparent 1px 14px)',
       }}>
         {product.images[0] ? (
           <Image
@@ -67,8 +67,8 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
             position: 'absolute', left: 8, bottom: 8,
             fontFamily: 'var(--f-mono)', fontSize: 9,
             letterSpacing: '0.06em', textTransform: 'uppercase',
-            color: 'rgba(44,37,32,0.65)',
-            background: 'rgba(251,247,239,0.7)',
+            color: 'rgba(0,0,0,0.65)',
+            background: 'rgba(255,255,255,0.7)',
             padding: '2px 5px', borderRadius: 3,
           }}>
             PHOTO · {firstWord}
@@ -82,7 +82,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
             fontFamily: 'var(--f-mono)', fontSize: 9, letterSpacing: '0.08em',
             textTransform: 'uppercase',
             padding: '3px 7px', borderRadius: 999,
-            background: 'rgba(251,247,239,0.85)',
+            background: 'rgba(255,255,255,0.85)',
             color: 'var(--c-ink)',
           }}>New</span>
         )}
@@ -105,7 +105,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
           style={{
             position: 'absolute', top: 10, right: 10,
             width: 30, height: 30, borderRadius: '50%',
-            background: 'rgba(251,247,239,0.85)',
+            background: 'rgba(255,255,255,0.85)',
             backdropFilter: 'blur(6px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             border: 'none', cursor: 'pointer',

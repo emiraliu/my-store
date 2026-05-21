@@ -14,17 +14,17 @@ const F = {
 
 const inputStyle: React.CSSProperties = {
   height: 48, borderRadius: 10,
-  border: '0.5px solid rgba(44,37,32,0.18)',
-  background: '#fbf7ef',
+  border: '0.5px solid rgba(0,0,0,0.18)',
+  background: '#ffffff',
   padding: '0 14px',
   fontSize: 14, fontFamily: F.body,
-  color: '#2c2520', outline: 'none',
+  color: '#000000', outline: 'none',
   boxSizing: 'border-box', width: '100%',
 }
 
 const labelStyle: React.CSSProperties = {
   fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em',
-  textTransform: 'uppercase', color: '#6b5e52', display: 'block', marginBottom: 8,
+  textTransform: 'uppercase', color: '#6e6e6e', display: 'block', marginBottom: 8,
 }
 
 export default function CheckoutPage() {
@@ -119,11 +119,11 @@ export default function CheckoutPage() {
 
       {/* Header */}
       <div style={{ padding: '60px 20px 24px' }}>
-        <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#6b5e52', marginBottom: 4 }}>
+        <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#6e6e6e', marginBottom: 4 }}>
           CHECKOUT
         </div>
-        <div style={{ fontFamily: F.display, fontSize: 36, fontWeight: 500, color: '#2c2520' }}>
-          Delivery<em style={{ fontStyle: 'italic', color: '#b5704d' }}>.</em>
+        <div style={{ fontFamily: F.display, fontSize: 36, fontWeight: 500, color: '#000000' }}>
+          Delivery<em style={{ fontStyle: 'italic', color: '#000000' }}>.</em>
         </div>
       </div>
 
@@ -173,14 +173,14 @@ export default function CheckoutPage() {
             {/* COD note */}
             <div style={{
               padding: '14px 16px', borderRadius: 12,
-              background: 'rgba(44,37,32,0.05)',
-              border: '0.5px solid rgba(44,37,32,0.10)',
-              fontSize: 12.5, color: '#6b5e52', lineHeight: 1.5,
+              background: 'rgba(0,0,0,0.05)',
+              border: '0.5px solid rgba(0,0,0,0.10)',
+              fontSize: 12.5, color: '#6e6e6e', lineHeight: 1.5,
             }}>
-              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#2c2520', marginBottom: 6 }}>
+              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#000000', marginBottom: 6 }}>
                 Cash on delivery
               </div>
-              After placing your order you'll receive an SMS. Reply <strong style={{ color: '#2c2520' }}>YES</strong> to confirm. You pay the courier in cash when the order arrives.
+              After placing your order you'll receive an SMS. Reply <strong style={{ color: '#000000' }}>YES</strong> to confirm. You pay the courier in cash when the order arrives.
             </div>
 
             {error && (
@@ -198,7 +198,7 @@ export default function CheckoutPage() {
               disabled={isPending}
               style={{
                 width: '100%', height: 52, borderRadius: 999,
-                background: '#2c2520', color: '#fbf7ef',
+                background: '#000000', color: '#ffffff',
                 border: 'none', fontSize: 14, fontWeight: 500,
                 letterSpacing: '0.03em', cursor: isPending ? 'not-allowed' : 'pointer',
                 opacity: isPending ? 0.7 : 1,
@@ -221,39 +221,39 @@ export default function CheckoutPage() {
         {/* Order summary */}
         <div className="co-summary-col">
           <div style={{
-            background: '#fbf7ef',
-            border: '0.5px solid rgba(44,37,32,0.10)',
+            background: '#ffffff',
+            border: '0.5px solid rgba(0,0,0,0.10)',
             borderRadius: 16, overflow: 'hidden',
           }}>
-            <div style={{ padding: '16px 18px 12px', borderBottom: '0.5px solid rgba(44,37,32,0.08)' }}>
-              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b5e52' }}>
+            <div style={{ padding: '16px 18px 12px', borderBottom: '0.5px solid rgba(0,0,0,0.08)' }}>
+              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6e6e6e' }}>
                 Order summary
               </div>
             </div>
             <div style={{ padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
               {items.map(item => (
                 <div key={`${item.product_id}-${item.size}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
-                  <span style={{ fontSize: 12.5, color: '#6b5e52', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: 12.5, color: '#6e6e6e', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {item.name}{item.size ? ` (${item.size})` : ''} ×{item.quantity}
                   </span>
-                  <span style={{ fontFamily: F.mono, fontSize: 12, flexShrink: 0, color: '#2c2520' }}>
+                  <span style={{ fontFamily: F.mono, fontSize: 12, flexShrink: 0, color: '#000000' }}>
                     €{(item.price * item.quantity).toFixed(2)}
                   </span>
                 </div>
               ))}
-              <div style={{ height: 1, background: 'rgba(44,37,32,0.08)', margin: '4px 0' }} />
+              <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', margin: '4px 0' }} />
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 12.5, color: '#6b5e52' }}>Subtotal</span>
+                <span style={{ fontSize: 12.5, color: '#6e6e6e' }}>Subtotal</span>
                 <span style={{ fontFamily: F.mono, fontSize: 12 }}>€{total.toFixed(2)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 12.5, color: '#6b5e52' }}>Delivery</span>
+                <span style={{ fontSize: 12.5, color: '#6e6e6e' }}>Delivery</span>
                 <span style={{ fontFamily: F.mono, fontSize: 12 }}>{shipping === 0 ? 'Free' : `€${shipping.toFixed(2)}`}</span>
               </div>
-              <div style={{ height: 1, background: 'rgba(44,37,32,0.08)', margin: '4px 0' }} />
+              <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', margin: '4px 0' }} />
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 13, fontWeight: 500, color: '#2c2520' }}>Total</span>
-                <span style={{ fontFamily: F.mono, fontSize: 13, fontWeight: 500, color: '#2c2520' }}>€{grandTotal.toFixed(2)}</span>
+                <span style={{ fontSize: 13, fontWeight: 500, color: '#000000' }}>Total</span>
+                <span style={{ fontFamily: F.mono, fontSize: 13, fontWeight: 500, color: '#000000' }}>€{grandTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>

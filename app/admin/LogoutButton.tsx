@@ -17,7 +17,7 @@ export default function LogoutButton() {
       title="Sign out"
       style={{
         background: 'none', border: 'none', cursor: 'pointer',
-        color: '#6b5e52', padding: 4,
+        color: '#6e6e6e', padding: 4,
         fontSize: 10,
         fontFamily: "var(--font-dm-mono), monospace",
         letterSpacing: '0.06em', textTransform: 'uppercase',

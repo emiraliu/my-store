@@ -42,8 +42,8 @@ export default function AdminSidebar() {
             position: fixed;
             top: 0; left: 0; right: 0;
             height: 56px;
-            background: #f6f1e6;
-            border-bottom: 0.5px solid rgba(44,37,32,0.10);
+            background: #f5f5f5;
+            border-bottom: 0.5px solid rgba(0,0,0,0.10);
             padding: 0 16px;
             z-index: 40;
           }
@@ -51,7 +51,7 @@ export default function AdminSidebar() {
             display: block;
             position: fixed;
             inset: 0;
-            background: rgba(44,37,32,0.45);
+            background: rgba(0,0,0,0.45);
             z-index: 48;
           }
           .adm-aside {
@@ -65,7 +65,7 @@ export default function AdminSidebar() {
           }
           .adm-aside.open {
             transform: translateX(0);
-            box-shadow: 12px 0 48px rgba(44,37,32,0.18);
+            box-shadow: 12px 0 48px rgba(0,0,0,0.18);
           }
           .adm-close { display: flex !important; }
         }
@@ -76,12 +76,12 @@ export default function AdminSidebar() {
         <button
           onClick={() => setOpen(v => !v)}
           aria-label="Open menu"
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, color: '#2c2520', fontSize: 20, lineHeight: 1 }}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, color: '#000000', fontSize: 20, lineHeight: 1 }}
         >
           ☰
         </button>
         <div style={{ fontFamily: F.display, fontSize: 22, fontWeight: 500, lineHeight: 1 }}>
-          My Store<em style={{ fontStyle: 'italic', color: '#b5704d' }}>.</em>
+          My Store<em style={{ fontStyle: 'italic', color: '#000000' }}>.</em>
         </div>
       </div>
 
@@ -93,13 +93,13 @@ export default function AdminSidebar() {
         className={`adm-aside${open ? ' open' : ''}`}
         style={{
           width: 232, flexShrink: 0,
-          background: '#f6f1e6',
-          borderRight: '0.5px solid rgba(44,37,32,0.10)',
+          background: '#f5f5f5',
+          borderRight: '0.5px solid rgba(0,0,0,0.10)',
           display: 'flex', flexDirection: 'column',
           padding: '16px 14px 14px',
           position: 'sticky', top: 0,
           height: '100dvh',
-          fontFamily: F.body, color: '#2c2520',
+          fontFamily: F.body, color: '#000000',
           overflowY: 'auto',
         }}
       >
@@ -107,7 +107,7 @@ export default function AdminSidebar() {
         <div className="adm-close" style={{ justifyContent: 'flex-end', marginBottom: 4 }}>
           <button
             onClick={close}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b5e52', fontSize: 18, padding: 6, lineHeight: 1 }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6e6e6e', fontSize: 18, padding: 6, lineHeight: 1 }}
             aria-label="Close menu"
           >
             ✕
@@ -117,15 +117,15 @@ export default function AdminSidebar() {
         {/* Brand */}
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, padding: '4px 10px 22px' }}>
           <div style={{ fontFamily: F.display, fontSize: 28, fontWeight: 500, lineHeight: 0.95, letterSpacing: '-0.01em' }}>
-            My Store<em style={{ fontStyle: 'italic', color: '#b5704d' }}>.</em>
+            My Store<em style={{ fontStyle: 'italic', color: '#000000' }}>.</em>
           </div>
-          <div style={{ fontFamily: F.mono, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b5e52', borderLeft: '0.5px solid rgba(44,37,32,0.18)', paddingLeft: 8 }}>
+          <div style={{ fontFamily: F.mono, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6e6e6e', borderLeft: '0.5px solid rgba(0,0,0,0.18)', paddingLeft: 8 }}>
             Admin
           </div>
         </div>
 
         {/* Operate */}
-        <div style={{ fontFamily: F.mono, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b5e52', padding: '0 10px 6px' }}>
+        <div style={{ fontFamily: F.mono, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6e6e6e', padding: '0 10px 6px' }}>
           Operate
         </div>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 4 }}>
@@ -136,8 +136,8 @@ export default function AdminSidebar() {
                 display: 'flex', alignItems: 'center', gap: 10,
                 padding: '10px 10px', borderRadius: 8,
                 fontSize: 13, textDecoration: 'none',
-                background: active ? '#2c2520' : 'transparent',
-                color: active ? '#fbf7ef' : '#6b5e52',
+                background: active ? '#000000' : 'transparent',
+                color: active ? '#ffffff' : '#6e6e6e',
                 transition: 'background 0.12s, color 0.12s',
               }}>
                 <span style={{ fontSize: 15, lineHeight: 1, opacity: 0.6 }}>
@@ -150,12 +150,12 @@ export default function AdminSidebar() {
         </nav>
 
         {/* Manage */}
-        <div style={{ fontFamily: F.mono, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b5e52', padding: '14px 10px 6px' }}>
+        <div style={{ fontFamily: F.mono, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6e6e6e', padding: '14px 10px 6px' }}>
           Manage
         </div>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {tools.map(label => (
-            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', borderRadius: 8, fontSize: 13, color: '#6b5e52', opacity: 0.5 }}>
+            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', borderRadius: 8, fontSize: 13, color: '#6e6e6e', opacity: 0.5 }}>
               <span style={{ fontSize: 7 }}>●</span>
               <span>{label}</span>
             </div>
@@ -168,8 +168,8 @@ export default function AdminSidebar() {
             display: 'flex', alignItems: 'center', gap: 8,
             padding: '9px 10px', borderRadius: 8,
             fontSize: 12, textDecoration: 'none',
-            color: '#6b5e52',
-            border: '0.5px solid rgba(44,37,32,0.10)',
+            color: '#6e6e6e',
+            border: '0.5px solid rgba(0,0,0,0.10)',
           }}>
             <span style={{ fontSize: 13 }}>←</span>
             Back to store
@@ -177,13 +177,13 @@ export default function AdminSidebar() {
         </div>
 
         {/* Footer */}
-        <div style={{ padding: '12px 10px', display: 'flex', alignItems: 'center', gap: 10, borderTop: '0.5px solid rgba(44,37,32,0.10)' }}>
-          <div style={{ width: 28, height: 28, borderRadius: 999, background: '#b5704d', color: '#fbf7ef', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F.display, fontSize: 14, fontWeight: 500, flexShrink: 0 }}>
+        <div style={{ padding: '12px 10px', display: 'flex', alignItems: 'center', gap: 10, borderTop: '0.5px solid rgba(0,0,0,0.10)' }}>
+          <div style={{ width: 28, height: 28, borderRadius: 999, background: '#000000', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F.display, fontSize: 14, fontWeight: 500, flexShrink: 0 }}>
             A
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <span style={{ fontSize: 12, fontWeight: 500 }}>Admin</span>
-            <span style={{ fontFamily: F.mono, fontSize: 9, letterSpacing: '0.06em', color: '#6b5e52' }}>Owner</span>
+            <span style={{ fontFamily: F.mono, fontSize: 9, letterSpacing: '0.06em', color: '#6e6e6e' }}>Owner</span>
           </div>
           <div style={{ marginLeft: 'auto' }}>
             <LogoutButton />

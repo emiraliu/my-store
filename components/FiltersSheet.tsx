@@ -28,7 +28,7 @@ export default function FiltersSheet({ open, filters, onChange, onClose, onClear
       <div className={`sheet-backdrop ${open ? 'open' : ''}`} onClick={onClose} />
       <div className={`bottom-sheet ${open ? 'open' : ''}`}>
         {/* Grabber */}
-        <div style={{ width: 38, height: 4, borderRadius: 4, background: 'rgba(44,37,32,0.22)', margin: '8px auto 0', flexShrink: 0 }} />
+        <div style={{ width: 38, height: 4, borderRadius: 4, background: 'rgba(0,0,0,0.22)', margin: '8px auto 0', flexShrink: 0 }} />
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 22px 0' }}>

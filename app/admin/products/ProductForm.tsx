@@ -21,18 +21,18 @@ function isVideo(url: string) {
 const inputStyle: React.CSSProperties = {
   width: '100%', boxSizing: 'border-box',
   height: 42, borderRadius: 10,
-  border: '0.5px solid rgba(44,37,32,0.18)',
-  background: '#fbf7ef',
+  border: '0.5px solid rgba(0,0,0,0.18)',
+  background: '#ffffff',
   padding: '0 14px',
   fontSize: 13.5, fontFamily: F.body,
-  color: '#2c2520', outline: 'none',
+  color: '#000000', outline: 'none',
 }
 
 const labelStyle: React.CSSProperties = {
   display: 'block',
   fontFamily: F.mono, fontSize: 9.5,
   letterSpacing: '0.08em', textTransform: 'uppercase',
-  color: '#6b5e52', marginBottom: 6,
+  color: '#6e6e6e', marginBottom: 6,
 }
 
 export default function ProductForm({ product }: { product?: Product }) {
@@ -162,11 +162,11 @@ export default function ProductForm({ product }: { product?: Product }) {
         {media.length > 0 && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 10 }}>
             {media.map(url => (
-              <div key={url} style={{ position: 'relative', aspectRatio: '1', borderRadius: 8, overflow: 'hidden', background: '#e6dac4' }}>
+              <div key={url} style={{ position: 'relative', aspectRatio: '1', borderRadius: 8, overflow: 'hidden', background: '#e5e5e5' }}>
                 {isVideo(url) ? (
-                  <div style={{ width: '100%', height: '100%', background: '#2c2520', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 4 }}>
-                    <span style={{ color: '#fbf7ef', fontSize: 20 }}>▶</span>
-                    <span style={{ fontFamily: F.mono, fontSize: 9, color: 'rgba(251,247,239,0.6)', letterSpacing: '0.06em' }}>VIDEO</span>
+                  <div style={{ width: '100%', height: '100%', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 4 }}>
+                    <span style={{ color: '#ffffff', fontSize: 20 }}>▶</span>
+                    <span style={{ fontFamily: F.mono, fontSize: 9, color: 'rgba(255,255,255,0.6)', letterSpacing: '0.06em' }}>VIDEO</span>
                   </div>
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -178,7 +178,7 @@ export default function ProductForm({ product }: { product?: Product }) {
                   style={{
                     position: 'absolute', top: 4, right: 4,
                     width: 20, height: 20, borderRadius: 999,
-                    background: 'rgba(44,37,32,0.7)', color: '#fbf7ef',
+                    background: 'rgba(0,0,0,0.7)', color: '#ffffff',
                     border: 'none', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: 11, lineHeight: 1,
@@ -197,9 +197,9 @@ export default function ProductForm({ product }: { product?: Product }) {
           disabled={uploading}
           style={{
             width: '100%', padding: '12px',
-            border: '0.5px dashed rgba(44,37,32,0.25)',
+            border: '0.5px dashed rgba(0,0,0,0.25)',
             borderRadius: 10, background: 'transparent',
-            fontFamily: F.body, fontSize: 13, color: '#6b5e52',
+            fontFamily: F.body, fontSize: 13, color: '#6e6e6e',
             cursor: uploading ? 'not-allowed' : 'pointer',
             opacity: uploading ? 0.6 : 1,
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
@@ -233,7 +233,7 @@ export default function ProductForm({ product }: { product?: Product }) {
                 onClick={() => setSizes(prev => prev.filter((_, j) => j !== i))}
                 style={{
                   width: 32, height: 42, borderRadius: 8,
-                  border: '0.5px solid rgba(44,37,32,0.18)',
+                  border: '0.5px solid rgba(0,0,0,0.18)',
                   background: 'transparent', color: '#9b4d4d',
                   cursor: 'pointer', fontSize: 16, display: 'flex',
                   alignItems: 'center', justifyContent: 'center',
@@ -246,8 +246,8 @@ export default function ProductForm({ product }: { product?: Product }) {
             onClick={() => setSizes(prev => [...prev, { size: '', stock: 0 }])}
             style={{
               padding: '8px 14px', borderRadius: 8,
-              border: '0.5px dashed rgba(44,37,32,0.25)',
-              background: 'transparent', color: '#6b5e52',
+              border: '0.5px dashed rgba(0,0,0,0.25)',
+              background: 'transparent', color: '#6e6e6e',
               fontSize: 12.5, fontFamily: F.body, cursor: 'pointer',
               textAlign: 'left',
             }}
@@ -262,19 +262,19 @@ export default function ProductForm({ product }: { product?: Product }) {
           onClick={() => setActive(v => !v)}
           style={{
             width: 16, height: 16, borderRadius: 4,
-            border: '0.5px solid rgba(44,37,32,0.18)',
-            background: active ? '#2c2520' : '#fbf7ef',
+            border: '0.5px solid rgba(0,0,0,0.18)',
+            background: active ? '#000000' : '#ffffff',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             cursor: 'pointer', flexShrink: 0,
           }}
         >
           {active && (
             <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
-              <path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="#fbf7ef" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           )}
         </div>
-        <span style={{ fontFamily: F.body, fontSize: 13, color: '#2c2520' }}>
+        <span style={{ fontFamily: F.body, fontSize: 13, color: '#000000' }}>
           Visible to customers
         </span>
       </label>
@@ -295,7 +295,7 @@ export default function ProductForm({ product }: { product?: Product }) {
           disabled={isPending || uploading}
           style={{
             padding: '10px 22px', borderRadius: 999,
-            background: '#2c2520', color: '#fbf7ef',
+            background: '#000000', color: '#ffffff',
             border: 'none', fontSize: 13, fontWeight: 500,
             fontFamily: F.body, cursor: isPending || uploading ? 'not-allowed' : 'pointer',
             opacity: isPending || uploading ? 0.6 : 1,
@@ -308,8 +308,8 @@ export default function ProductForm({ product }: { product?: Product }) {
           onClick={() => router.back()}
           style={{
             padding: '10px 22px', borderRadius: 999,
-            background: 'transparent', color: '#2c2520',
-            border: '0.5px solid rgba(44,37,32,0.18)',
+            background: 'transparent', color: '#000000',
+            border: '0.5px solid rgba(0,0,0,0.18)',
             fontSize: 13, fontFamily: F.body, cursor: 'pointer',
           }}
         >

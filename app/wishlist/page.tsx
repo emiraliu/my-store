@@ -79,7 +79,7 @@ export default function WishlistPage() {
               <div style={{
                 width: 88, height: 110, borderRadius: 10, overflow: 'hidden', flexShrink: 0,
                 backgroundColor: getToneColor(p.category, p.id),
-                backgroundImage: 'repeating-linear-gradient(135deg, rgba(44,37,32,0.025) 0 1px, transparent 1px 14px)',
+                backgroundImage: 'repeating-linear-gradient(135deg, rgba(0,0,0,0.025) 0 1px, transparent 1px 14px)',
                 position: 'relative',
               }}>
                 {p.images[0] && (

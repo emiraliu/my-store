@@ -41,7 +41,7 @@ function Dots({ total, index }: { total: number; index: number }) {
             width: isActive ? 18 : isEdge ? 4 : 5,
             height: isActive ? 5 : isEdge ? 4 : 5,
             borderRadius: 999,
-            background: isActive ? 'var(--c-ink)' : 'rgba(44,37,32,0.35)',
+            background: isActive ? 'var(--c-ink)' : 'rgba(0,0,0,0.35)',
             opacity: isEdge ? 0.45 : 1,
             transition: 'width 0.25s cubic-bezier(0.4,0,0.2,1), opacity 0.25s',
             flexShrink: 0,
@@ -72,13 +72,13 @@ export default function ImageGallery({ images, alt, toneColor, firstWord }: Prop
       <div style={{
         position: 'relative', width: '100%', aspectRatio: '3/4', overflow: 'hidden',
         borderRadius: '0 0 24px 24px', backgroundColor: toneColor,
-        backgroundImage: 'repeating-linear-gradient(135deg, rgba(44,37,32,0.025) 0 1px, transparent 1px 14px)',
+        backgroundImage: 'repeating-linear-gradient(135deg, rgba(0,0,0,0.025) 0 1px, transparent 1px 14px)',
       }}>
         <span style={{
           position: 'absolute', left: 12, bottom: 12,
           fontFamily: 'var(--f-mono)', fontSize: 9, letterSpacing: '0.06em',
-          textTransform: 'uppercase', color: 'rgba(44,37,32,0.65)',
-          background: 'rgba(251,247,239,0.7)', padding: '2px 5px', borderRadius: 3,
+          textTransform: 'uppercase', color: 'rgba(0,0,0,0.65)',
+          background: 'rgba(255,255,255,0.7)', padding: '2px 5px', borderRadius: 3,
         }}>
           PHOTO · {firstWord}
         </span>

@@ -51,7 +51,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
       <button onClick={() => router.back()} style={{
         position: 'fixed', top: 16, left: 14, zIndex: 10,
         width: 38, height: 38, borderRadius: 999,
-        background: 'rgba(251,247,239,0.86)',
+        background: 'rgba(255,255,255,0.86)',
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -68,7 +68,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
         style={{
           position: 'fixed', top: 16, right: 14, zIndex: 10,
           width: 38, height: 38, borderRadius: 999,
-          background: 'rgba(251,247,239,0.86)',
+          background: 'rgba(255,255,255,0.86)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -136,11 +136,11 @@ export default function AddToCartButton({ product }: { product: Product }) {
                       height: 44, minWidth: 44, padding: '0 14px',
                       borderRadius: 12,
                       border: outOfStock
-                        ? '0.5px solid rgba(44,37,32,0.10)'
+                        ? '0.5px solid rgba(0,0,0,0.10)'
                         : '0.5px solid var(--c-line)',
                       background: active ? 'var(--c-ink)' : 'var(--c-card)',
                       color: outOfStock
-                        ? 'rgba(44,37,32,0.25)'
+                        ? 'rgba(0,0,0,0.25)'
                         : active ? 'var(--c-card)' : 'var(--c-ink)',
                       fontFamily: 'var(--f-mono)', fontSize: 11, letterSpacing: '0.06em',
                       cursor: outOfStock ? 'not-allowed' : 'pointer',
@@ -156,7 +156,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
                       }}>
                         <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0 }}>
                           <line x1="10%" y1="90%" x2="90%" y2="10%"
-                            stroke="rgba(44,37,32,0.18)" strokeWidth="0.5" />
+                            stroke="rgba(0,0,0,0.18)" strokeWidth="0.5" />
                         </svg>
                       </span>
                     )}
@@ -220,14 +220,14 @@ export default function AddToCartButton({ product }: { product: Product }) {
       <div style={{
         position: 'fixed',
         left: 16, right: 16, bottom: 30,
-        background: 'rgba(251,247,239,0.92)',
+        background: 'rgba(255,255,255,0.92)',
         backdropFilter: 'blur(18px) saturate(160%)',
         WebkitBackdropFilter: 'blur(18px) saturate(160%)',
         border: '0.5px solid var(--c-line)',
         borderRadius: 28,
         padding: '10px 10px 10px 22px',
         display: 'flex', alignItems: 'center', gap: 12,
-        boxShadow: '0 10px 30px rgba(44,37,32,0.10)',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.10)',
         zIndex: 20,
       }}>
         <div style={{ flex: 1 }}>

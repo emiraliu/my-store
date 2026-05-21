@@ -20,7 +20,7 @@ function pillStyle(tone: string): React.CSSProperties {
   if (tone === 'good')    return { color: '#4d6b4d', background: 'rgba(77,107,77,0.10)' }
   if (tone === 'warn')    return { color: '#b58a4d', background: 'rgba(181,138,77,0.12)' }
   if (tone === 'bad')     return { color: '#9b4d4d', background: 'rgba(155,77,77,0.12)' }
-  return { color: '#6b5e52', background: 'rgba(44,37,32,0.05)' }
+  return { color: '#6e6e6e', background: 'rgba(0,0,0,0.05)' }
 }
 
 export default async function AdminDashboard() {
@@ -46,7 +46,7 @@ export default async function AdminDashboard() {
   ]
 
   return (
-    <div style={{ fontFamily: F.body, color: '#2c2520' }}>
+    <div style={{ fontFamily: F.body, color: '#000000' }}>
       <style>{`
         .adm-topbar { padding: 12px 20px; }
         .adm-page-pad { padding: 20px 20px 60px; }
@@ -61,19 +61,19 @@ export default async function AdminDashboard() {
       {/* Topbar */}
       <div className="adm-topbar" style={{
         display: 'flex', alignItems: 'center',
-        borderBottom: '0.5px solid rgba(44,37,32,0.10)',
-        gap: 14, flexShrink: 0, background: '#efe9df',
+        borderBottom: '0.5px solid rgba(0,0,0,0.10)',
+        gap: 14, flexShrink: 0, background: '#f5f5f5',
       }}>
-        <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6b5e52' }}>
+        <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6e6e6e' }}>
           Admin <span style={{ margin: '0 8px', opacity: 0.5 }}>/</span>
-          <strong style={{ color: '#2c2520', fontWeight: 500 }}>Dashboard</strong>
+          <strong style={{ color: '#000000', fontWeight: 500 }}>Dashboard</strong>
         </div>
         <Link href="/admin/orders" style={{
           marginLeft: 'auto',
           display: 'inline-flex', alignItems: 'center', gap: 6,
           padding: '7px 12px', borderRadius: 999,
-          background: '#fbf7ef', border: '0.5px solid rgba(44,37,32,0.10)',
-          color: '#2c2520', fontSize: 12.5, textDecoration: 'none',
+          background: '#ffffff', border: '0.5px solid rgba(0,0,0,0.10)',
+          color: '#000000', fontSize: 12.5, textDecoration: 'none',
           fontFamily: F.body,
         }}>
           All orders →
@@ -86,9 +86,9 @@ export default async function AdminDashboard() {
           fontSize: 38, fontWeight: 500, lineHeight: 1.05, letterSpacing: '-0.01em',
           margin: '0 0 6px',
         }}>
-          Dashboard<em style={{ fontStyle: 'italic', color: '#b5704d' }}>.</em>
+          Dashboard<em style={{ fontStyle: 'italic', color: '#000000' }}>.</em>
         </h1>
-        <p style={{ fontFamily: F.display, fontStyle: 'italic', fontSize: 14, color: '#6b5e52', margin: '0 0 24px' }}>
+        <p style={{ fontFamily: F.display, fontStyle: 'italic', fontSize: 14, color: '#6e6e6e', margin: '0 0 24px' }}>
           Cash on delivery — collect when the courier hands it off.
         </p>
 
@@ -97,12 +97,12 @@ export default async function AdminDashboard() {
           {stats.map(card => (
             <div key={card.label} className="adm-stat-card" style={{
               padding: '18px 20px 16px',
-              background: '#fbf7ef',
-              border: '0.5px solid rgba(44,37,32,0.10)',
+              background: '#ffffff',
+              border: '0.5px solid rgba(0,0,0,0.10)',
               borderRadius: 14,
               display: 'flex', flexDirection: 'column', gap: 8,
             }}>
-              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b5e52' }}>
+              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6e6e6e' }}>
                 {card.label}
               </div>
               <div style={{ fontFamily: F.display, fontSize: 32, fontWeight: 500, lineHeight: 1, letterSpacing: '-0.01em' }}>
@@ -113,10 +113,10 @@ export default async function AdminDashboard() {
         </div>
 
         {/* Recent orders panel */}
-        <div style={{ background: '#fbf7ef', border: '0.5px solid rgba(44,37,32,0.10)', borderRadius: 14, overflow: 'hidden' }}>
+        <div style={{ background: '#ffffff', border: '0.5px solid rgba(0,0,0,0.10)', borderRadius: 14, overflow: 'hidden' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', padding: '18px 20px 12px' }}>
             <div>
-              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6b5e52' }}>
+              <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6e6e6e' }}>
                 RECENT ORDERS
               </div>
               <div style={{ fontFamily: F.display, fontSize: 22, fontWeight: 500, marginTop: 4 }}>
@@ -126,8 +126,8 @@ export default async function AdminDashboard() {
             <Link href="/admin/orders" style={{
               display: 'inline-flex', alignItems: 'center',
               padding: '7px 12px', borderRadius: 999,
-              background: '#fbf7ef', border: '0.5px solid rgba(44,37,32,0.10)',
-              color: '#2c2520', fontSize: 12.5, textDecoration: 'none',
+              background: '#ffffff', border: '0.5px solid rgba(0,0,0,0.10)',
+              color: '#000000', fontSize: 12.5, textDecoration: 'none',
               fontFamily: F.body,
             }}>
               All orders →
@@ -135,7 +135,7 @@ export default async function AdminDashboard() {
           </div>
 
           {!recentOrders || recentOrders.length === 0 ? (
-            <p style={{ padding: '16px 20px', color: '#6b5e52', fontSize: 13 }}>No orders yet.</p>
+            <p style={{ padding: '16px 20px', color: '#6e6e6e', fontSize: 13 }}>No orders yet.</p>
           ) : (
             <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
             <table style={{ width: '100%', minWidth: 520, borderCollapse: 'collapse', fontSize: 13 }}>
@@ -145,9 +145,9 @@ export default async function AdminDashboard() {
                     <th key={h} style={{
                       textAlign: 'left',
                       fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em',
-                      textTransform: 'uppercase', color: '#6b5e52', fontWeight: 500,
-                      padding: '12px 16px', borderBottom: '0.5px solid rgba(44,37,32,0.10)',
-                      background: '#f6f1e6',
+                      textTransform: 'uppercase', color: '#6e6e6e', fontWeight: 500,
+                      padding: '12px 16px', borderBottom: '0.5px solid rgba(0,0,0,0.10)',
+                      background: '#f5f5f5',
                     }}>
                       {h}
                     </th>
@@ -160,13 +160,13 @@ export default async function AdminDashboard() {
                   const shortId = order.id.slice(0, 8).toUpperCase()
                   const date = new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                   return (
-                    <tr key={order.id} style={{ borderBottom: '0.5px solid rgba(44,37,32,0.10)' }}>
+                    <tr key={order.id} style={{ borderBottom: '0.5px solid rgba(0,0,0,0.10)' }}>
                       <td style={{ padding: '14px 16px', fontFamily: F.mono, fontSize: 11.5 }}>
                         #{shortId}
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         <div style={{ fontWeight: 500 }}>{order.profiles?.full_name ?? '—'}</div>
-                        <div style={{ fontFamily: F.mono, fontSize: 10, color: '#6b5e52', marginTop: 2 }}>{order.phone}</div>
+                        <div style={{ fontFamily: F.mono, fontSize: 10, color: '#6e6e6e', marginTop: 2 }}>{order.phone}</div>
                       </td>
                       <td style={{ padding: '14px 16px', fontFamily: F.mono, fontSize: 11.5, fontWeight: 500 }}>
                         €{order.total.toFixed(2)}
@@ -183,7 +183,7 @@ export default async function AdminDashboard() {
                           {s.label}
                         </span>
                       </td>
-                      <td style={{ padding: '14px 16px', fontFamily: F.mono, fontSize: 10, color: '#6b5e52' }}>
+                      <td style={{ padding: '14px 16px', fontFamily: F.mono, fontSize: 10, color: '#6e6e6e' }}>
                         {date}
                       </td>
                     </tr>

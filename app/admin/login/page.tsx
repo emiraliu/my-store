@@ -40,11 +40,11 @@ export default function AdminLoginPage() {
 
   const inputStyle: React.CSSProperties = {
     height: 46, borderRadius: 10,
-    border: '0.5px solid rgba(44,37,32,0.18)',
-    background: '#fbf7ef',
+    border: '0.5px solid rgba(0,0,0,0.18)',
+    background: '#ffffff',
     padding: '0 14px',
     fontSize: 14, fontFamily: F.body,
-    color: '#2c2520', outline: 'none',
+    color: '#000000', outline: 'none',
     boxSizing: 'border-box', width: '100%',
   }
 
@@ -62,17 +62,13 @@ export default function AdminLoginPage() {
       `}</style>
       <div
         className="sa-login-root"
-        style={{ position: 'fixed', inset: 0, zIndex: 50, fontFamily: F.body, color: '#2c2520' }}
+        style={{ position: 'fixed', inset: 0, zIndex: 50, fontFamily: F.body, color: '#000000' }}
       >
         {/* ── Left art panel ── */}
         <div className="sa-login-art" style={{
-          background: '#7a5a48',
-          backgroundImage: [
-            'radial-gradient(circle at 20% 80%, rgba(217,179,154,0.35) 0, transparent 45%)',
-            'radial-gradient(circle at 80% 20%, rgba(240,231,212,0.18) 0, transparent 50%)',
-            'repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 16px)',
-          ].join(', '),
-          color: '#fbf7ef',
+          background: '#000000',
+          backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 16px)',
+          color: '#ffffff',
           padding: '44px 48px 36px',
           flexDirection: 'column', justifyContent: 'space-between',
           overflow: 'hidden',
@@ -90,9 +86,9 @@ export default function AdminLoginPage() {
             <h1 style={{
               fontFamily: F.display,
               fontSize: 36, fontWeight: 500, lineHeight: 1.1, letterSpacing: '-0.01em',
-              margin: '0 0 12px', color: '#fbf7ef', whiteSpace: 'nowrap',
+              margin: '0 0 12px', color: '#ffffff', whiteSpace: 'nowrap',
             }}>
-              Quietly run the shop<em style={{ fontStyle: 'italic', color: '#d9b39a' }}>.</em>
+              Quietly run the shop<em style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.5)' }}>.</em>
             </h1>
             <p style={{
               fontFamily: F.mono,
@@ -105,20 +101,20 @@ export default function AdminLoginPage() {
 
           {/* Bottom */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: F.mono, fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.6 }}>
-            <span style={{ width: 5, height: 5, borderRadius: 999, background: '#d9b39a', display: 'inline-block' }} />
+            <span style={{ width: 5, height: 5, borderRadius: 999, background: 'rgba(255,255,255,0.5)', display: 'inline-block' }} />
             Admin panel
           </div>
         </div>
 
         {/* ── Right form panel ── */}
         <div className="sa-login-form" style={{
-          background: '#efe9df',
+          background: '#f5f5f5',
           display: 'flex', flexDirection: 'column', justifyContent: 'center',
           overflowY: 'auto',
         }}>
           {/* Header */}
           <div style={{ marginBottom: 28 }}>
-            <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b5e52', marginBottom: 10 }}>
+            <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6e6e6e', marginBottom: 10 }}>
               Sign in to Admin
             </div>
             <h2 style={{
@@ -126,16 +122,16 @@ export default function AdminLoginPage() {
               fontSize: 32, fontWeight: 500, lineHeight: 1.05, letterSpacing: '-0.01em',
               margin: '0 0 4px',
             }}>
-              Welcome back<em style={{ fontStyle: 'italic', color: '#b5704d' }}>.</em>
+              Welcome back<em style={{ fontStyle: 'italic', color: '#000000' }}>.</em>
             </h2>
-            <p style={{ fontFamily: F.display, fontStyle: 'italic', fontSize: 13, color: '#6b5e52', margin: 0 }}>
+            <p style={{ fontFamily: F.display, fontStyle: 'italic', fontSize: 13, color: '#6e6e6e', margin: 0 }}>
               Use your credentials to continue.
             </p>
           </div>
 
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
-              <span style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b5e52' }}>
+              <span style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6e6e6e' }}>
                 Username
               </span>
               <input
@@ -150,7 +146,7 @@ export default function AdminLoginPage() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
-              <span style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b5e52' }}>
+              <span style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6e6e6e' }}>
                 Password
               </span>
               <div style={{ position: 'relative' }}>
@@ -170,7 +166,7 @@ export default function AdminLoginPage() {
                     position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
                     background: 'none', border: 'none', cursor: 'pointer',
                     fontFamily: F.mono, fontSize: 10,
-                    color: '#6b5e52', letterSpacing: '0.06em', textTransform: 'uppercase',
+                    color: '#6e6e6e', letterSpacing: '0.06em', textTransform: 'uppercase',
                   }}
                 >
                   {showPw ? 'Hide' : 'Show'}
@@ -179,26 +175,26 @@ export default function AdminLoginPage() {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '4px 0 20px', fontSize: 12.5 }}>
-              <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#6b5e52', cursor: 'pointer' }}>
+              <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#6e6e6e', cursor: 'pointer' }}>
                 <div
                   onClick={() => setKeepSignedIn(v => !v)}
                   style={{
                     width: 16, height: 16, borderRadius: 4,
-                    border: '0.5px solid rgba(44,37,32,0.18)',
-                    background: keepSignedIn ? '#2c2520' : '#fbf7ef',
+                    border: '0.5px solid rgba(0,0,0,0.18)',
+                    background: keepSignedIn ? '#000000' : '#ffffff',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     cursor: 'pointer', flexShrink: 0,
                   }}
                 >
                   {keepSignedIn && (
                     <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
-                      <path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="#fbf7ef" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   )}
                 </div>
                 Keep me signed in
               </label>
-              <span style={{ fontFamily: F.mono, fontSize: 10, color: '#6b5e52', letterSpacing: '0.04em' }}>
+              <span style={{ fontFamily: F.mono, fontSize: 10, color: '#6e6e6e', letterSpacing: '0.04em' }}>
                 Secured · 2FA on
               </span>
             </div>
@@ -218,7 +214,7 @@ export default function AdminLoginPage() {
               disabled={loading}
               style={{
                 width: '100%', height: 48, borderRadius: 999,
-                background: '#2c2520', color: '#fbf7ef',
+                background: '#000000', color: '#ffffff',
                 border: 'none', fontSize: 14, fontWeight: 500,
                 letterSpacing: '0.03em', cursor: loading ? 'not-allowed' : 'pointer',
                 opacity: loading ? 0.7 : 1,
@@ -233,17 +229,17 @@ export default function AdminLoginPage() {
           {/* Footer */}
           <div style={{
             marginTop: 24, paddingTop: 18,
-            borderTop: '0.5px solid rgba(44,37,32,0.10)',
+            borderTop: '0.5px solid rgba(0,0,0,0.10)',
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
             flexWrap: 'wrap', gap: 8,
           }}>
             <Link href="/" style={{
-              fontFamily: F.body, fontSize: 12, color: '#6b5e52',
+              fontFamily: F.body, fontSize: 12, color: '#6e6e6e',
               textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 5,
             }}>
               ← Back to store
             </Link>
-            <span style={{ fontFamily: F.mono, fontSize: 9.5, color: '#6b5e52', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: F.mono, fontSize: 9.5, color: '#6e6e6e', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
               No account? Contact owner
             </span>
           </div>

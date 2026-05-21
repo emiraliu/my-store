@@ -43,13 +43,13 @@ export default function OrderStatusSelect({ orderId, currentStatus }: { orderId:
         onChange={handleChange}
         disabled={isPending}
         style={{
-          border: `0.5px solid ${errMsg ? '#9b4d4d' : 'rgba(44,37,32,0.18)'}`,
+          border: `0.5px solid ${errMsg ? '#9b4d4d' : 'rgba(0,0,0,0.18)'}`,
           borderRadius: 8,
           padding: '6px 10px',
           fontSize: 12,
           fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
-          color: '#2c2520',
-          background: '#fbf7ef',
+          color: '#000000',
+          background: '#ffffff',
           outline: 'none',
           cursor: isPending ? 'not-allowed' : 'pointer',
           opacity: isPending ? 0.5 : 1,

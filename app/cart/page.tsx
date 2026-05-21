@@ -70,7 +70,7 @@ export default function CartPage() {
             <div style={{
               width: 84, height: 108, borderRadius: 10, overflow: 'hidden', flexShrink: 0,
               backgroundColor: getToneColor('clothing'),
-              backgroundImage: 'repeating-linear-gradient(135deg, rgba(44,37,32,0.025) 0 1px, transparent 1px 14px)',
+              backgroundImage: 'repeating-linear-gradient(135deg, rgba(0,0,0,0.025) 0 1px, transparent 1px 14px)',
               position: 'relative',
             }}>
               {item.image && (
@@ -131,7 +131,7 @@ export default function CartPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{
               width: 40, height: 40, borderRadius: 999,
-              background: 'rgba(251,247,239,0.14)',
+              background: 'rgba(255,255,255,0.14)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
             }}>
               <Banknote size={20} strokeWidth={1.5} />
@@ -144,7 +144,7 @@ export default function CartPage() {
               <span style={{
                 fontFamily: 'var(--f-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase',
                 padding: '4px 8px', borderRadius: 999,
-                background: 'rgba(251,247,239,0.14)',
+                background: 'rgba(255,255,255,0.14)',
               }}>ONLY METHOD</span>
             </div>
           </div>
@@ -159,7 +159,7 @@ export default function CartPage() {
           {/* Reassurances */}
           <div style={{
             display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8,
-            paddingTop: 12, borderTop: '0.5px solid rgba(251,247,239,0.18)',
+            paddingTop: 12, borderTop: '0.5px solid rgba(255,255,255,0.18)',
           }}>
             {['Try on at door', 'No card needed', 'Free returns'].map(t => (
               <div key={t} style={{
@@ -190,13 +190,13 @@ export default function CartPage() {
       <div style={{
         position: 'fixed',
         left: 16, right: 16, bottom: 100,
-        background: 'rgba(251,247,239,0.92)',
+        background: 'rgba(255,255,255,0.92)',
         backdropFilter: 'blur(18px) saturate(160%)',
         WebkitBackdropFilter: 'blur(18px) saturate(160%)',
         border: '0.5px solid var(--c-line)',
         borderRadius: 28,
         padding: 10,
-        boxShadow: '0 10px 30px rgba(44,37,32,0.10)',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.10)',
         zIndex: 20,
       }}>
         <button onClick={handlePlaceOrder} style={{
