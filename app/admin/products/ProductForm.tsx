@@ -42,7 +42,11 @@ export default function ProductForm({ product }: { product?: Product }) {
   const [category, setCategory] = useState(product?.category ?? 'dresses')
   const [stock, setStock] = useState(product?.stock?.toString() ?? '0')
   const [media, setMedia] = useState<string[]>(product?.images ?? [])
-  const [sizesRaw, setSizesRaw] = useState(product?.sizes?.join(', ') ?? '')
+  const [sizes, setSizes] = useState<{ size: string; stock: number }[]>(
+    product?.sizes
+      ? Object.entries(product.sizes).map(([size, s]) => ({ size, stock: s as number }))
+      : []
+  )
   const [active, setActive] = useState(product?.active ?? true)
   const [error, setError] = useState('')
   const [uploading, setUploading] = useState(false)
@@ -79,10 +83,12 @@ export default function ProductForm({ product }: { product?: Product }) {
     setMedia(prev => prev.filter(u => u !== url))
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
     setError('')
-    const sizes = sizesRaw.split(',').map(s => s.trim()).filter(Boolean)
+    const sizesMap = Object.fromEntries(
+      sizes.filter(s => s.size.trim()).map(s => [s.size.trim().toUpperCase(), s.stock])
+    )
     const payload = {
       name,
       description: description || null,
@@ -90,7 +96,7 @@ export default function ProductForm({ product }: { product?: Product }) {
       category,
       stock: parseInt(stock),
       images: media,
-      sizes,
+      sizes: sizesMap,
       active,
     }
     startTransition(async () => {
@@ -204,14 +210,51 @@ export default function ProductForm({ product }: { product?: Product }) {
       </div>
 
       <div>
-        <label style={labelStyle}>Sizes (comma separated)</label>
-        <input
-          type="text"
-          value={sizesRaw}
-          onChange={e => setSizesRaw(e.target.value)}
-          placeholder="XS, S, M, L, XL"
-          style={inputStyle}
-        />
+        <label style={labelStyle}>Sizes & Stock</label>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {sizes.map((row, i) => (
+            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 80px 32px', gap: 8, alignItems: 'center' }}>
+              <input
+                type="text"
+                value={row.size}
+                onChange={e => setSizes(prev => prev.map((r, j) => j === i ? { ...r, size: e.target.value } : r))}
+                placeholder="e.g. XS"
+                style={{ ...inputStyle, textTransform: 'uppercase' }}
+              />
+              <input
+                type="number"
+                min="0"
+                value={row.stock}
+                onChange={e => setSizes(prev => prev.map((r, j) => j === i ? { ...r, stock: parseInt(e.target.value) || 0 } : r))}
+                style={{ ...inputStyle, textAlign: 'center' }}
+              />
+              <button
+                type="button"
+                onClick={() => setSizes(prev => prev.filter((_, j) => j !== i))}
+                style={{
+                  width: 32, height: 42, borderRadius: 8,
+                  border: '0.5px solid rgba(44,37,32,0.18)',
+                  background: 'transparent', color: '#9b4d4d',
+                  cursor: 'pointer', fontSize: 16, display: 'flex',
+                  alignItems: 'center', justifyContent: 'center',
+                }}
+              >×</button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => setSizes(prev => [...prev, { size: '', stock: 0 }])}
+            style={{
+              padding: '8px 14px', borderRadius: 8,
+              border: '0.5px dashed rgba(44,37,32,0.25)',
+              background: 'transparent', color: '#6b5e52',
+              fontSize: 12.5, fontFamily: F.body, cursor: 'pointer',
+              textAlign: 'left',
+            }}
+          >
+            + Add size
+          </button>
+        </div>
       </div>
 
       <label style={{ display: 'inline-flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>

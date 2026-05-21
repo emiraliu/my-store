@@ -22,11 +22,21 @@ create table products (
   price numeric(10,2) not null,
   category text not null,
   images text[] default '{}',
-  sizes text[] default '{}',
+  sizes jsonb default '{}',   -- { "XS": 5, "S": 3, "M": 0 } — per-size stock counts
   stock integer default 0,
   active boolean default true,
   created_at timestamptz default now()
 );
+
+-- Migration: run this if you already have a products table with sizes as text[]
+-- alter table products
+--   alter column sizes type jsonb
+--   using (
+--     case
+--       when sizes is null or array_length(sizes, 1) is null then '{}'::jsonb
+--       else (select jsonb_object_agg(s, 0) from unnest(sizes) s)
+--     end
+--   );
 
 -- Orders
 create table orders (

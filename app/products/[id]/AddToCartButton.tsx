@@ -112,7 +112,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
         </div>
 
         {/* Size selector */}
-        {product.sizes.length > 0 && (
+        {Object.keys(product.sizes).length > 0 && (
           <div style={{ marginBottom: 22 }}>
             <div style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
@@ -124,19 +124,45 @@ export default function AddToCartButton({ product }: { product: Product }) {
               </button>
             </div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {product.sizes.map(s => (
-                <button key={s} onClick={() => setSelectedSize(s)} style={{
-                  height: 44, minWidth: 44, padding: '0 14px',
-                  borderRadius: 12,
-                  border: '0.5px solid var(--c-line)',
-                  background: selectedSize === s ? 'var(--c-ink)' : 'var(--c-card)',
-                  color: selectedSize === s ? 'var(--c-card)' : 'var(--c-ink)',
-                  fontFamily: 'var(--f-mono)', fontSize: 11, letterSpacing: '0.06em',
-                  cursor: 'pointer',
-                }}>
-                  {s}
-                </button>
-              ))}
+              {Object.entries(product.sizes).map(([s, qty]) => {
+                const outOfStock = qty === 0
+                const active = selectedSize === s
+                return (
+                  <button
+                    key={s}
+                    onClick={() => !outOfStock && setSelectedSize(s)}
+                    disabled={outOfStock}
+                    style={{
+                      height: 44, minWidth: 44, padding: '0 14px',
+                      borderRadius: 12,
+                      border: outOfStock
+                        ? '0.5px solid rgba(44,37,32,0.10)'
+                        : '0.5px solid var(--c-line)',
+                      background: active ? 'var(--c-ink)' : 'var(--c-card)',
+                      color: outOfStock
+                        ? 'rgba(44,37,32,0.25)'
+                        : active ? 'var(--c-card)' : 'var(--c-ink)',
+                      fontFamily: 'var(--f-mono)', fontSize: 11, letterSpacing: '0.06em',
+                      cursor: outOfStock ? 'not-allowed' : 'pointer',
+                      position: 'relative', overflow: 'hidden',
+                    }}
+                  >
+                    {s}
+                    {outOfStock && (
+                      <span style={{
+                        position: 'absolute', inset: 0,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        pointerEvents: 'none',
+                      }}>
+                        <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0 }}>
+                          <line x1="10%" y1="90%" x2="90%" y2="10%"
+                            stroke="rgba(44,37,32,0.18)" strokeWidth="0.5" />
+                        </svg>
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
             </div>
           </div>
         )}

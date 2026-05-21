@@ -5,7 +5,7 @@ export interface Product {
   price: number
   category: string
   images: string[]
-  sizes: string[]
+  sizes: Record<string, number>
   stock: number
   active: boolean
   created_at: string
