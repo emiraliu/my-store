@@ -109,7 +109,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
             backdropFilter: 'blur(6px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             border: 'none', cursor: 'pointer',
-            color: wished ? 'var(--c-accent)' : 'var(--c-ink)',
+            color: wished ? '#e5222a' : 'var(--c-ink)',
             zIndex: 2,
           }}
           aria-label={wished ? 'Remove from wishlist' : 'Add to wishlist'}

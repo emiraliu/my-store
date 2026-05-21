@@ -72,7 +72,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: wished ? 'var(--c-accent)' : 'var(--c-ink)',
+          color: wished ? '#e5222a' : 'var(--c-ink)',
           border: '0.5px solid var(--c-line)',
           cursor: 'pointer',
         }}>

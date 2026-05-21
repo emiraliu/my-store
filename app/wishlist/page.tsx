@@ -103,7 +103,7 @@ export default function WishlistPage() {
                 onClick={e => { e.stopPropagation(); toggleWish(p.id) }}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
-                  color: 'var(--c-accent)', padding: 4,
+                  color: '#e5222a', padding: 4,
                 }}
                 aria-label="Remove from wishlist"
               >
