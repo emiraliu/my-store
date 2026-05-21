@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/server'
 import OrderStatusSelect from './OrderStatusSelect'
+import OrderDetailButton from './OrderDetailButton'
 
 const F = {
   display: "var(--font-cormorant), 'Times New Roman', serif",
@@ -34,7 +35,7 @@ export default async function AdminOrdersPage({
   const supabase = await createAdminClient()
   const { data: orders } = await supabase
     .from('orders')
-    .select('*, profiles(full_name, phone)')
+    .select('*, profiles(full_name, surname, username, phone, gender, age, address)')
     .order('created_at', { ascending: false })
 
   const all = orders ?? []
@@ -127,7 +128,7 @@ export default async function AdminOrdersPage({
             <table style={{ width: '100%', minWidth: 720, borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
                 <tr>
-                  {['Order', 'Customer', 'Items', 'Total', 'Payment', 'Status', 'Update', 'Placed'].map((h, i) => (
+                  {['Order', 'Customer', 'Items', 'Total', 'Payment', 'Status', 'Update', 'Placed', ''].map((h, i) => (
                     <th key={i} style={{
                       textAlign: 'left',
                       fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em',
@@ -200,6 +201,9 @@ export default async function AdminOrdersPage({
                       </td>
                       <td style={{ padding: '14px 16px', fontFamily: F.mono, fontSize: 10, color: '#6b5e52' }}>
                         {date}
+                      </td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <OrderDetailButton order={order} />
                       </td>
                     </tr>
                   )

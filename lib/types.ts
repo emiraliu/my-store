@@ -37,7 +37,15 @@ export interface Order {
   phone: string
   address: string
   created_at: string
-  profiles?: { full_name: string | null; phone: string | null }
+  profiles?: {
+    full_name: string | null
+    surname: string | null
+    username: string | null
+    phone: string | null
+    gender: string | null
+    age: number | null
+    address: string | null
+  }
 }
 
 export interface Profile {
