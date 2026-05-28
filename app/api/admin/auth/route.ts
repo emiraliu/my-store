@@ -1,12 +1,24 @@
 import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
 
-const ADMIN_USER = process.env.ADMIN_USERNAME ?? 'admin'
-const ADMIN_PASS = process.env.ADMIN_PASSWORD ?? 'admin'
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? ''
 
 export async function POST(req: Request) {
-  const { username, password } = await req.json()
+  const { email, password } = await req.json()
 
-  if (username !== ADMIN_USER || password !== ADMIN_PASS) {
+  if (!ADMIN_EMAIL) {
+    return NextResponse.json({ error: 'Admin not configured' }, { status: 500 })
+  }
+
+  if (email !== ADMIN_EMAIL) {
+    return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+  }
+
+  // Sign in with Supabase using their real account credentials
+  const supabase = await createClient()
+  const { error } = await supabase.auth.signInWithPassword({ email, password })
+
+  if (error) {
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
   }
 
@@ -14,7 +26,7 @@ export async function POST(req: Request) {
   res.cookies.set('admin-session', 'admin-authed', {
     httpOnly: true,
     path: '/',
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: 60 * 60 * 24 * 7,
     sameSite: 'lax',
   })
   return res

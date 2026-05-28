@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import type { Order } from '@/lib/types'
+import LogoutButton from '@/components/LogoutButton'
 
 const STATUS_CONFIG: Record<string, { label: string; dot: string }> = {
   pending_confirmation: { label: 'Awaiting confirmation', dot: '#f59e0b' },
@@ -58,12 +59,12 @@ export default async function ProfilePage({
                 {user.email && <span style={{ fontFamily: 'var(--f-mono)', fontSize: 11, color: 'var(--c-ink-mute)' }}>{user.email}</span>}
               </div>
             </div>
-            <Link href="/" style={{
-              fontFamily: 'var(--f-body)', fontSize: 13, color: 'var(--c-ink-mute)',
-              textDecoration: 'underline', textUnderlineOffset: 4,
-            }}>
-              Continue shopping
-            </Link>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+              <Link href="/" style={{ fontFamily: 'var(--f-body)', fontSize: 13, color: 'var(--c-ink-mute)', textDecoration: 'underline', textUnderlineOffset: 4 }}>
+                Continue shopping
+              </Link>
+              <LogoutButton />
+            </div>
           </div>
         </div>
       </div>

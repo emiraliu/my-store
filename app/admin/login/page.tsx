@@ -11,7 +11,7 @@ const F = {
 }
 
 export default function AdminLoginPage() {
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPw, setShowPw] = useState(false)
   const [keepSignedIn, setKeepSignedIn] = useState(true)
@@ -26,7 +26,7 @@ export default function AdminLoginPage() {
     const res = await fetch('/api/admin/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     })
     setLoading(false)
     if (res.ok) {
@@ -132,15 +132,15 @@ export default function AdminLoginPage() {
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
               <span style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6e6e6e' }}>
-                Username
+                Email
               </span>
               <input
-                type="text"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                placeholder="admin"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="you@example.com"
                 required
-                autoComplete="username"
+                autoComplete="email"
                 style={inputStyle}
               />
             </div>

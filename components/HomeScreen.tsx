@@ -187,21 +187,21 @@ export default function HomeScreen({ products }: { products: Product[] }) {
             </div>
 
             {/* Right — featured product showcase */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              {products.slice(0, 4).map((p, i) => (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+              {products.slice(0, 6).map((p, i) => (
                 <a key={p.id} href={`/products/${p.id}`} style={{ textDecoration: 'none' }}>
                   <div style={{
-                    aspectRatio: i === 0 ? '2/3' : '2/3',
-                    borderRadius: 16, overflow: 'hidden',
+                    aspectRatio: '2/3',
+                    borderRadius: 12, overflow: 'hidden',
                     background: '#222',
                     position: 'relative',
-                    transform: i % 2 === 1 ? 'translateY(24px)' : 'none',
+                    transform: i % 2 === 1 ? 'translateY(16px)' : 'none',
                   }}>
                     {p.images[0] ? (
-                      <Image src={p.images[0]} alt={p.name} fill style={{ objectFit: 'cover', transition: 'transform 0.6s ease' }} sizes="240px" />
+                      <Image src={p.images[0]} alt={p.name} fill style={{ objectFit: 'cover', transition: 'transform 0.6s ease' }} sizes="180px" />
                     ) : (
-                      <div style={{ width: '100%', height: '100%', background: '#1a1a1a', display: 'flex', alignItems: 'flex-end', padding: 12 }}>
-                        <span style={{ fontFamily: 'var(--f-mono)', fontSize: 9, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{p.name}</span>
+                      <div style={{ width: '100%', height: '100%', background: '#1a1a1a', display: 'flex', alignItems: 'flex-end', padding: 10 }}>
+                        <span style={{ fontFamily: 'var(--f-mono)', fontSize: 8, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{p.name}</span>
                       </div>
                     )}
                   </div>

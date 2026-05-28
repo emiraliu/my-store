@@ -1,45 +1,17 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { Home, Heart, ShoppingBag, User } from 'lucide-react'
 import { useCart } from './CartProvider'
 import { useWishlist } from './WishlistProvider'
 
 export default function BottomNav() {
   const pathname = usePathname()
-  const router = useRouter()
   const { count } = useCart()
   const { wishlist } = useWishlist()
-  const tapTimes = useRef<number[]>([])
 
   if (pathname.startsWith('/products/') || pathname.startsWith('/admin')) return null
-
-  function handleYouTap(e: React.MouseEvent) {
-    e.preventDefault()
-
-    // Profile opens immediately — no delay
-    router.push('/profile')
-
-    // Record tap; discard anything outside the 1.5 s window
-    const now = Date.now()
-    tapTimes.current.push(now)
-    tapTimes.current = tapTimes.current.filter(t => now - t <= 1500)
-
-    if (tapTimes.current.length === 5) {
-      const times = tapTimes.current
-      tapTimes.current = [] // reset regardless of outcome
-
-      // All 4 gaps must have a coefficient of variation < 0.5 (consistent rhythm)
-      const gaps = times.slice(1).map((t, i) => t - times[i])
-      const mean = gaps.reduce((a, b) => a + b, 0) / gaps.length
-      if (mean > 0) {
-        const cv = Math.sqrt(gaps.reduce((a, g) => a + (g - mean) ** 2, 0) / gaps.length) / mean
-        if (cv < 0.5) router.push('/admin/login')
-      }
-    }
-  }
 
   const tabs = [
     { href: '/',         icon: Home,        label: 'Shop' },
@@ -107,8 +79,8 @@ export default function BottomNav() {
         )
       })}
 
-      {/* You tab — 5 consistent taps within 1.5 s opens admin */}
-      <button onClick={handleYouTap} style={{
+      {/* You tab */}
+      <Link href="/profile" style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
         color: youActive ? 'var(--c-ink)' : 'var(--c-ink-mute)',
         fontSize: 10,
@@ -117,10 +89,7 @@ export default function BottomNav() {
         padding: '6px 4px',
         height: '100%',
         justifyContent: 'center',
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        width: '100%',
+        textDecoration: 'none',
       }}>
         <User size={20} strokeWidth={1.5} />
         <span>You</span>
@@ -131,7 +100,7 @@ export default function BottomNav() {
           opacity: youActive ? 1 : 0,
           transition: 'opacity 0.18s',
         }} />
-      </button>
+      </Link>
     </nav>
   )
 }
