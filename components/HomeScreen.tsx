@@ -21,15 +21,6 @@ export default function HomeScreen({ products }: { products: Product[] }) {
   const [category, setCategory] = useState('all')
   const [filters, setFilters] = useState<Filters>({})
   const [filtersOpen, setFiltersOpen] = useState(false)
-  const [isDesktop, setIsDesktop] = useState(false)
-
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)')
-    setIsDesktop(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
 
   const filtered = useMemo(() => {
     let list = [...products]

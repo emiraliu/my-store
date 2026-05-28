@@ -66,13 +66,11 @@ body {
 }
 
 /* ─── Responsive show/hide ────────────────────────────── */
-/* Use on any element — handles block, flex, grid */
-.mobile-only  { }   /* visible by default */
 .desktop-only { display: none !important; }
 
 @media (min-width: 768px) {
   .mobile-only  { display: none !important; }
-  .desktop-only { display: revert !important; }
+  .desktop-only { display: block !important; }
 }
 
 /* ─── Desktop body padding (compensate for top nav) ──── */
