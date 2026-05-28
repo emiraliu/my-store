@@ -371,18 +371,16 @@ export default function HomeScreen({ products }: { products: Product[] }) {
       ) : (
         <>
           {/* Desktop: section heading */}
-          {isDesktop && (
-            <div className="page-wrap desktop-only" style={{ paddingTop: 56, paddingBottom: 24 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <div>
-                  <div className="section-eyebrow">{category === 'all' ? 'Full collection' : CATEGORIES.find(c => c.id === category)?.label}</div>
-                  <div className="section-title">{filtered.length} Pieces</div>
-                </div>
+          <div className="page-wrap desktop-only" style={{ paddingTop: 56, paddingBottom: 24 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+              <div>
+                <div className="section-eyebrow">{category === 'all' ? 'Full collection' : CATEGORIES.find(c => c.id === category)?.label}</div>
+                <div className="section-title">{filtered.length} Pieces</div>
               </div>
             </div>
-          )}
-          <div className="page-wrap" style={{ paddingTop: isDesktop ? 0 : 0, paddingBottom: isDesktop ? 80 : 120 }}>
-            <div className="product-grid" style={isDesktop ? {} : { padding: '0 0px' }}>
+          </div>
+          <div className="page-wrap" style={{ paddingBottom: 80 }}>
+            <div className="product-grid">
               {filtered.map((p, i) => (
                 <ProductCard key={p.id} product={p} index={i} />
               ))}

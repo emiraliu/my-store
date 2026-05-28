@@ -4,7 +4,18 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { ArrowRight, Instagram, Facebook } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+
+const IconInstagram = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+  </svg>
+)
+const IconFacebook = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+  </svg>
+)
 
 const NAV = [
   {
@@ -121,7 +132,7 @@ export default function Footer() {
               Modest wear made for the modern woman — timeless pieces delivered to your door with cash on delivery.
             </p>
             <div style={{ display: 'flex', gap: 12 }}>
-              {[{ Icon: Instagram, href: '#' }, { Icon: Facebook, href: '#' }].map(({ Icon, href }, i) => (
+              {[{ Icon: IconInstagram, href: '#' }, { Icon: IconFacebook, href: '#' }].map(({ Icon, href }, i) => (
                 <Link key={i} href={href} style={{
                   width: 38, height: 38, borderRadius: 999,
                   border: '0.5px solid rgba(255,255,255,0.15)',
@@ -132,7 +143,7 @@ export default function Footer() {
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#fff'; (e.currentTarget as HTMLElement).style.color = '#fff' }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.15)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.6)' }}
                 >
-                  <Icon size={16} strokeWidth={1.5} />
+                  <Icon />
                 </Link>
               ))}
             </div>
