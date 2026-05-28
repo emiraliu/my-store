@@ -71,7 +71,7 @@ export default function CheckoutPage() {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        router.push('/login')
+        router.push('/verify')
         return
       }
 
