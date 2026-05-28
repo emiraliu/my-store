@@ -110,24 +110,26 @@ export default function CheckoutPage() {
     <div style={{ background: 'var(--c-bg)', minHeight: '100dvh', paddingBottom: 120 }}>
       <style>{`
         .co-grid { display: flex; flex-direction: column; gap: 28px; padding: 0 20px; }
-        @media (min-width: 680px) {
-          .co-grid { flex-direction: row; align-items: flex-start; max-width: 800px; margin: 0 auto; padding: 0 28px; }
+        @media (min-width: 768px) {
+          .co-grid { flex-direction: row; align-items: flex-start; max-width: 960px; margin: 0 auto; padding: 0 60px; gap: 48px; }
           .co-form-col { flex: 1 1 0; }
-          .co-summary-col { flex: 0 0 280px; }
+          .co-summary-col { flex: 0 0 340px; position: sticky; top: calc(var(--desk-nav-h) + var(--desk-bar-h) + 24px); }
         }
       `}</style>
 
       {/* Header */}
-      <div style={{ padding: '60px 20px 24px' }}>
-        <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#6e6e6e', marginBottom: 4 }}>
-          CHECKOUT
-        </div>
-        <div style={{ fontFamily: F.display, fontSize: 36, fontWeight: 500, color: '#000000' }}>
-          Delivery<em style={{ fontStyle: 'italic', color: '#000000' }}>.</em>
+      <div style={{ borderBottom: '0.5px solid var(--c-line)', marginBottom: 0 }}>
+        <div style={{ padding: '40px 20px 24px', maxWidth: 960, margin: '0 auto' }} className="co-header">
+          <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6e6e6e', marginBottom: 6 }}>
+            Checkout
+          </div>
+          <div style={{ fontFamily: F.display, fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 500, color: '#000000' }}>
+            Delivery details<em style={{ fontStyle: 'italic', color: '#000000' }}>.</em>
+          </div>
         </div>
       </div>
 
-      <div className="co-grid">
+      <div className="co-grid" style={{ paddingTop: 32 }}>
         {/* Form */}
         <div className="co-form-col">
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -223,7 +225,7 @@ export default function CheckoutPage() {
           <div style={{
             background: '#ffffff',
             border: '0.5px solid rgba(0,0,0,0.10)',
-            borderRadius: 16, overflow: 'hidden',
+            borderRadius: 20, overflow: 'hidden',
           }}>
             <div style={{ padding: '16px 18px 12px', borderBottom: '0.5px solid rgba(0,0,0,0.08)' }}>
               <div style={{ fontFamily: F.mono, fontSize: 9.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6e6e6e' }}>

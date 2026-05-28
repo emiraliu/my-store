@@ -4,6 +4,8 @@ import type { Product } from '@/lib/types'
 import { getToneColor } from '@/lib/tones'
 import AddToCartButton from './AddToCartButton'
 import ImageGallery from './ImageGallery'
+import DesktopProductLayout from './DesktopProductLayout'
+import Footer from '@/components/Footer'
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -16,14 +18,21 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
   return (
     <div style={{ background: 'var(--c-bg)', minHeight: '100dvh' }}>
-      <ImageGallery
-        images={product.images}
-        alt={product.name}
-        toneColor={toneColor}
-        firstWord={firstWord}
-      />
-      {/* AddToCartButton handles: back btn, heart btn, body content, floating bar */}
-      <AddToCartButton product={product} />
+      {/* Mobile layout */}
+      <div className="mobile-only">
+        <ImageGallery images={product.images} alt={product.name} toneColor={toneColor} firstWord={firstWord} />
+        <AddToCartButton product={product} />
+      </div>
+
+      {/* Desktop layout */}
+      <div className="desktop-only">
+        <DesktopProductLayout product={product} toneColor={toneColor} firstWord={firstWord} />
+      </div>
+
+      {/* Footer on desktop only (not inside product page on mobile) */}
+      <div className="desktop-only">
+        <Footer />
+      </div>
     </div>
   )
 }

@@ -50,7 +50,7 @@ export default function BottomNav() {
   const youActive = pathname === '/profile'
 
   return (
-    <nav style={{
+    <nav className="mobile-only" style={{
       position: 'fixed',
       left: 12, right: 12, bottom: 22,
       height: 60,

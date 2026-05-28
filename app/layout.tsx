@@ -4,6 +4,8 @@ import './globals.css'
 import CartProvider from '@/components/CartProvider'
 import WishlistProvider from '@/components/WishlistProvider'
 import BottomNav from '@/components/BottomNav'
+import DesktopNav from '@/components/DesktopNav'
+import Footer from '@/components/Footer'
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -28,17 +30,32 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'MyStore',
-  description: 'Premium modest wear, made to last — delivered to your door.',
+  title: 'Hidaya Wear — Modest Fashion',
+  description: 'Premium modest wear, made to last — delivered to your door with cash on delivery.',
+  keywords: ['modest wear', 'hijab fashion', 'islamic clothing', 'abaya', 'modest dresses'],
+  openGraph: {
+    title: 'Hidaya Wear',
+    description: 'Premium modest wear, delivered to your door.',
+    type: 'website',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable} ${dmMono.variable}`}>
-      <body className="min-h-dvh">
+      <body>
         <CartProvider>
           <WishlistProvider>
-            <main className="pb-28">{children}</main>
+            {/* Desktop nav — hidden on mobile via CSS */}
+            <DesktopNav />
+
+            <main style={{ paddingBottom: 0 }}>
+              {children}
+            </main>
+
+            <Footer />
+
+            {/* Mobile bottom nav */}
             <BottomNav />
           </WishlistProvider>
         </CartProvider>
