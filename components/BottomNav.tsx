@@ -19,7 +19,7 @@ export default function BottomNav() {
     { href: '/cart',     icon: ShoppingBag, label: 'Bag' },
   ]
 
-  const youActive = pathname === '/profile'
+  const youActive = pathname === '/profile' || pathname === '/verify'
 
   return (
     <nav className="mobile-only" style={{
@@ -80,7 +80,7 @@ export default function BottomNav() {
       })}
 
       {/* You tab */}
-      <Link href="/profile" style={{
+      <Link href="/verify" style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
         color: youActive ? 'var(--c-ink)' : 'var(--c-ink-mute)',
         fontSize: 10,

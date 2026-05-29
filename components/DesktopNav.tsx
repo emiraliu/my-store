@@ -207,7 +207,7 @@ export default function DesktopNav() {
             </Link>
 
             {/* Account */}
-            <Link href="/profile" style={{ textDecoration: 'none' }}>
+            <Link href="/verify" style={{ textDecoration: 'none' }}>
               <NavIconDiv label="Account">
                 <User size={18} strokeWidth={1.5} />
               </NavIconDiv>
