@@ -40,7 +40,7 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user && (pathname.startsWith('/profile') || pathname.startsWith('/checkout'))) {
-    return NextResponse.redirect(new URL('/register', request.url))
+    return NextResponse.redirect(new URL('/verify', request.url))
   }
 
   return supabaseResponse
