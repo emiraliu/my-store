@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 
 function normalizePhone(raw: string): string | null {
   const cleaned = raw.trim().replace(/[\s\-\(\)]/g, '')
@@ -7,24 +8,47 @@ function normalizePhone(raw: string): string | null {
   return /^\+[1-9]\d{7,14}$/.test(withPlus) ? withPlus : null
 }
 
+function isUsername(value: string): boolean {
+  return /^[a-zA-Z0-9_]{3,20}$/.test(value.trim())
+}
+
 export async function POST(req: NextRequest) {
-  const { phone, password } = await req.json()
+  const { identifier, password } = await req.json()
 
-  if (!phone || !password) {
-    return NextResponse.json({ error: 'Phone and password are required.' }, { status: 400 })
+  if (!identifier || !password) {
+    return NextResponse.json({ error: 'Username/phone and password are required.' }, { status: 400 })
   }
 
-  const normalizedPhone = normalizePhone(phone)
-  if (!normalizedPhone) {
-    return NextResponse.json({ error: 'Enter a valid international phone number (e.g. +447911123456).' }, { status: 400 })
+  let fakeEmail: string
+
+  const normalizedPhone = normalizePhone(identifier)
+  if (normalizedPhone) {
+    fakeEmail = `${normalizedPhone.replace('+', '')}@mystore.user`
+  } else if (isUsername(identifier)) {
+    const admin = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    )
+    const { data: profile } = await admin
+      .from('profiles')
+      .select('phone')
+      .eq('username', identifier.trim().toLowerCase())
+      .maybeSingle()
+
+    if (!profile?.phone) {
+      return NextResponse.json({ error: 'No account found with that username.' }, { status: 401 })
+    }
+    fakeEmail = `${profile.phone.replace('+', '')}@mystore.user`
+  } else {
+    return NextResponse.json({ error: 'Enter a valid username or phone number.' }, { status: 400 })
   }
 
-  const fakeEmail = `${normalizedPhone.replace('+', '')}@mystore.user`
   const supabase = await createClient()
   const { error } = await supabase.auth.signInWithPassword({ email: fakeEmail, password })
 
   if (error) {
-    return NextResponse.json({ error: 'Incorrect phone number or password.' }, { status: 401 })
+    return NextResponse.json({ error: 'Incorrect credentials.' }, { status: 401 })
   }
 
   return NextResponse.json({ ok: true })

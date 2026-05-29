@@ -22,7 +22,7 @@ const labelStyle: React.CSSProperties = {
 }
 
 export default function LoginPage() {
-  const [phone, setPhone] = useState('')
+  const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
@@ -43,7 +43,7 @@ export default function LoginPage() {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, password }),
+      body: JSON.stringify({ identifier, password }),
     })
 
     const data = await res.json()
@@ -76,11 +76,12 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <div>
-            <label style={labelStyle}>Phone number</label>
+            <label style={labelStyle}>Username or phone number</label>
             <input
-              style={inputStyle} type="tel"
-              value={phone} onChange={e => setPhone(e.target.value)}
-              placeholder="+44 7911 123456" required
+              style={inputStyle} type="text"
+              value={identifier} onChange={e => setIdentifier(e.target.value)}
+              placeholder="ana_yildiz or +44 7911 123456" required
+              autoComplete="username"
             />
           </div>
 
