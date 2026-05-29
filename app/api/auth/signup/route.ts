@@ -9,7 +9,8 @@ function normalizePhone(raw: string): string | null {
 }
 
 export async function POST(req: NextRequest) {
-  const { name, surname, gender, age, username, password, phone } = await req.json()
+  const { name, surname, gender, age, username, password, phone, email } = await req.json()
+  const cleanEmail = email?.trim().toLowerCase() || null
 
   if (!name?.trim() || !surname?.trim() || !gender || !age || !username?.trim() || !password || !phone) {
     return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
@@ -56,10 +57,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Username is already taken.' }, { status: 400 })
   }
 
-  // Create auth user
+  // Check email already taken (if provided)
+  if (cleanEmail) {
+    const { data: existingEmail } = await admin
+      .from('profiles')
+      .select('id')
+      .eq('email', cleanEmail)
+      .maybeSingle()
+    if (existingEmail) {
+      return NextResponse.json({ error: 'An account with this email already exists.' }, { status: 400 })
+    }
+  }
+
+  // Use real email for Supabase auth if provided (enables email password reset)
   const fakeEmail = `${normalizedPhone.replace('+', '')}@mystore.user`
+  const authEmail = cleanEmail ?? fakeEmail
   const { data: created, error: createErr } = await admin.auth.admin.createUser({
-    email: fakeEmail,
+    email: authEmail,
     password,
     email_confirm: true,
     user_metadata: {
@@ -84,6 +98,7 @@ export async function POST(req: NextRequest) {
   const { error: profileErr } = await admin.from('profiles').upsert({
     id: created.user.id,
     phone: normalizedPhone,
+    email: cleanEmail,
     full_name: name.trim(),
     surname: surname.trim(),
     username: username.toLowerCase(),
@@ -104,7 +119,7 @@ export async function POST(req: NextRequest) {
   // Sign in to establish session cookies
   const supabase = await createClient()
   const { error: signInErr } = await supabase.auth.signInWithPassword({
-    email: fakeEmail,
+    email: authEmail,
     password,
   })
   if (signInErr) {

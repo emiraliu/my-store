@@ -80,11 +80,11 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <div>
-            <label style={labelStyle}>Username or phone number</label>
+            <label style={labelStyle}>Username, email or phone</label>
             <input
               style={inputStyle} type="text"
               value={identifier} onChange={e => setIdentifier(e.target.value)}
-              placeholder="ana_yildiz or +44 7911 123456" required
+              placeholder="username or +355 69 000 0000" required
               autoComplete="username"
             />
           </div>

@@ -31,6 +31,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -43,7 +44,7 @@ export default function RegisterPage() {
     const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, surname, gender, age, username, password, phone }),
+      body: JSON.stringify({ name, surname, gender, age, username, password, phone, email }),
     })
 
     const data = await res.json()
@@ -152,10 +153,26 @@ export default function RegisterPage() {
             <input
               style={inputStyle} type="tel"
               value={phone} onChange={e => setPhone(e.target.value)}
-              placeholder="+44 7911 123456" required
+              placeholder="+355 69 000 0000" required
             />
             <div style={{ fontSize: 11, color: 'var(--c-ink-mute)', marginTop: 4, fontFamily: 'var(--f-mono)' }}>
-              Include country code · e.g. +44, +1, +90
+              Include country code · e.g. +355, +44, +1
+            </div>
+          </div>
+
+          {/* Email (optional) */}
+          <div>
+            <label style={labelStyle}>
+              Email <span style={{ textTransform: 'none', letterSpacing: 0, opacity: 0.6 }}>· optional</span>
+            </label>
+            <input
+              style={inputStyle} type="email"
+              value={email} onChange={e => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
+            />
+            <div style={{ fontSize: 11, color: 'var(--c-ink-mute)', marginTop: 4, fontFamily: 'var(--f-mono)' }}>
+              Used for password recovery if you forget your password
             </div>
           </div>
 

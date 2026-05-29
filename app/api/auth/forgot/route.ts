@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createHmac, randomInt } from 'crypto'
 import { createClient } from '@supabase/supabase-js'
+import { createClient as createServerClient } from '@/lib/supabase/server'
 import { getTwilioClient } from '@/lib/twilio'
 
 function normalizePhone(raw: string): string | null {
@@ -18,8 +19,28 @@ function makeToken(phone: string, otp: string): string {
 }
 
 export async function POST(req: NextRequest) {
-  const { phone } = await req.json()
+  const body = await req.json()
 
+  // ── Email flow ──────────────────────────────────────────
+  if (body.email) {
+    const email = body.email.trim().toLowerCase()
+    if (!email.includes('@')) {
+      return NextResponse.json({ error: 'Invalid email address.' }, { status: 400 })
+    }
+
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hidayawear.com'
+    const supabase = await createServerClient()
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${siteUrl}/auth/callback?next=/reset-password`,
+    })
+
+    // Always return OK — don't reveal whether the email exists
+    if (error) console.error('[forgot/email]', error.message)
+    return NextResponse.json({ ok: true })
+  }
+
+  // ── Phone / SMS flow ────────────────────────────────────
+  const { phone } = body
   const normalizedPhone = normalizePhone(phone)
   if (!normalizedPhone) {
     return NextResponse.json({ error: 'Enter a valid phone number.' }, { status: 400 })
@@ -52,8 +73,8 @@ export async function POST(req: NextRequest) {
       to: normalizedPhone,
     })
   } catch (e) {
-    console.error('[forgot] SMS error:', e)
-    return NextResponse.json({ error: 'Failed to send SMS. Please try again.' }, { status: 500 })
+    console.error('[forgot/sms]', e)
+    return NextResponse.json({ error: 'Failed to send SMS. Try resetting with your email instead.' }, { status: 500 })
   }
 
   return NextResponse.json({ token })

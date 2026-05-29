@@ -34,6 +34,14 @@ export async function POST(req: NextRequest) {
   // Regular user login
   let fakeEmail: string
 
+  // Email login — sign in directly with the real email
+  if (identifier.includes('@')) {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signInWithPassword({ email: identifier.trim().toLowerCase(), password })
+    if (error) return NextResponse.json({ error: 'Incorrect email or password.' }, { status: 401 })
+    return NextResponse.json({ ok: true })
+  }
+
   const normalizedPhone = normalizePhone(identifier)
   if (normalizedPhone) {
     fakeEmail = `${normalizedPhone.replace('+', '')}@mystore.user`
