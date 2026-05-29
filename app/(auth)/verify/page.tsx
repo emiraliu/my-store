@@ -54,7 +54,11 @@ export default function LoginPage() {
       return
     }
 
-    router.replace('/')
+    if (data.admin) {
+      router.replace('/admin')
+    } else {
+      router.replace('/')
+    }
     router.refresh()
   }
 

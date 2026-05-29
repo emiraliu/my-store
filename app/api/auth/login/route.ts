@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME ?? ''
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? ''
+
 function normalizePhone(raw: string): string | null {
   const cleaned = raw.trim().replace(/[\s\-\(\)]/g, '')
   const withPlus = cleaned.startsWith('+') ? cleaned : `+${cleaned}`
@@ -19,6 +22,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Username/phone and password are required.' }, { status: 400 })
   }
 
+  // Admin shortcut — checked before any DB lookup
+  if (ADMIN_USERNAME && identifier === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    const res = NextResponse.json({ ok: true, admin: true })
+    res.cookies.set('admin-session', 'admin-authed', {
+      httpOnly: true, path: '/', maxAge: 60 * 60 * 24 * 7, sameSite: 'lax',
+    })
+    return res
+  }
+
+  // Regular user login
   let fakeEmail: string
 
   const normalizedPhone = normalizePhone(identifier)

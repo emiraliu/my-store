@@ -6,11 +6,13 @@ export async function proxy(request: NextRequest) {
 
   // Admin routes: cookie-based auth only, never touch Supabase
   if (pathname.startsWith('/admin')) {
-    if (!pathname.startsWith('/admin/login')) {
-      const session = request.cookies.get('admin-session')?.value
-      if (session !== 'admin-authed') {
-        return NextResponse.redirect(new URL('/admin/login', request.url))
-      }
+    // Old /admin/login URL — redirect to unified sign-in
+    if (pathname.startsWith('/admin/login')) {
+      return NextResponse.redirect(new URL('/verify', request.url))
+    }
+    const session = request.cookies.get('admin-session')?.value
+    if (session !== 'admin-authed') {
+      return NextResponse.redirect(new URL('/verify', request.url))
     }
     return NextResponse.next()
   }
