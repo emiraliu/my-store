@@ -57,18 +57,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Username is already taken.' }, { status: 400 })
   }
 
-  // Check email already taken (if provided)
-  if (cleanEmail) {
-    const { data: existingEmail } = await admin
-      .from('profiles')
-      .select('id')
-      .eq('email', cleanEmail)
-      .maybeSingle()
-    if (existingEmail) {
-      return NextResponse.json({ error: 'An account with this email already exists.' }, { status: 400 })
-    }
-  }
-
   // Use real email for Supabase auth if provided (enables email password reset)
   const fakeEmail = `${normalizedPhone.replace('+', '')}@mystore.user`
   const authEmail = cleanEmail ?? fakeEmail
@@ -98,7 +86,6 @@ export async function POST(req: NextRequest) {
   const { error: profileErr } = await admin.from('profiles').upsert({
     id: created.user.id,
     phone: normalizedPhone,
-    email: cleanEmail,
     full_name: name.trim(),
     surname: surname.trim(),
     username: username.toLowerCase(),

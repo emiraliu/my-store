@@ -84,7 +84,7 @@ export default function LoginPage() {
             <input
               style={inputStyle} type="text"
               value={identifier} onChange={e => setIdentifier(e.target.value)}
-              placeholder="username or +355 69 000 0000" required
+              placeholder="username" required
               autoComplete="username"
             />
           </div>

@@ -218,8 +218,8 @@ export default function HomeScreen({ products }: { products: Product[] }) {
           </div>
         </div>
 
-        {/* New arrivals teaser row */}
-        {newProducts.length > 0 && (
+        {/* New arrivals teaser row — only when some products are older (avoids duplicate in grid) */}
+        {newProducts.length > 0 && products.length > newProducts.length && (
           <section style={{ padding: '72px 0 0' }}>
             <div className="page-wrap">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }}>
