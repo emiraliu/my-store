@@ -53,14 +53,17 @@ export async function POST(req: NextRequest) {
     )
     const { data: profile } = await admin
       .from('profiles')
-      .select('phone')
+      .select('id, phone')
       .eq('username', identifier.trim().toLowerCase())
       .maybeSingle()
 
     if (!profile?.phone) {
       return NextResponse.json({ error: 'No account found with that username.' }, { status: 401 })
     }
-    fakeEmail = `${profile.phone.replace('+', '')}@mystore.user`
+
+    // Use the actual email stored in Supabase Auth — may be a real email or the fake phone-based one
+    const { data: { user: authUser } } = await admin.auth.admin.getUserById(profile.id)
+    fakeEmail = authUser?.email ?? `${profile.phone.replace('+', '')}@mystore.user`
   } else {
     return NextResponse.json({ error: 'Enter a valid username or phone number.' }, { status: 400 })
   }
