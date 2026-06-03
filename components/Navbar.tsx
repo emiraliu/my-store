@@ -21,8 +21,7 @@ export default function Navbar({ user, profile }: NavbarProps) {
   async function signOut() {
     const supabase = createClient()
     await supabase.auth.signOut()
-    router.push('/')
-    router.refresh()
+    window.location.href = '/'
   }
 
   return (

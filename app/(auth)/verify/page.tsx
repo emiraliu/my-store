@@ -54,12 +54,7 @@ export default function LoginPage() {
       return
     }
 
-    if (data.admin) {
-      router.replace('/admin')
-    } else {
-      router.replace('/')
-    }
-    router.refresh()
+    window.location.href = data.admin ? '/admin' : '/'
   }
 
   return (

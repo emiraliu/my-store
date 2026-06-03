@@ -55,8 +55,7 @@ export default function RegisterPage() {
       return
     }
 
-    router.replace('/')
-    router.refresh()
+    window.location.href = '/'
   }
 
   return (

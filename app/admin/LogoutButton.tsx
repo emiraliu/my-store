@@ -7,8 +7,7 @@ export default function LogoutButton() {
 
   async function handleLogout() {
     await fetch('/api/admin/auth', { method: 'DELETE' })
-    router.replace('/admin/login')
-    router.refresh()
+    window.location.href = '/verify'
   }
 
   return (
